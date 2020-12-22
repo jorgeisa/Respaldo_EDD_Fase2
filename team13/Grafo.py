@@ -31,7 +31,7 @@ class Grafo:
         vertice = self.existe_vertice(valor)
         if vertice is None:
             self.lista_vertices.append(Vertice(valor))
-            print('Nuevo vertice: ', valor)
+            #print('Nuevo vertice: ', valor)
         else:
             print('Ya existe')
 
@@ -43,23 +43,6 @@ class Grafo:
             print('No es posible enlazar')
         else:
             origen.get_lista_adyacentes().append(destino)
-
-    def recorrido_anchura(self):
-        lista_aux = []
-        for a in self.lista_vertices:
-            if lista_aux.__contains__(a) is False:
-                lista_aux.append(a)
-            # Recorriendo nodos adyacentes y que no estén en la lista
-            for b in a.get_lista_adyacentes():
-                if lista_aux.__contains__(b):
-                    pass
-                else:
-                    lista_aux.append(b)
-
-        print('RECORRIDO ANCHURA')
-        if lista_aux is not None:
-            for i in lista_aux:
-                print(i.get_valor())
 
     def graficar(self):
         aux = []
@@ -77,19 +60,49 @@ class Grafo:
         cadena += '}'
         print(cadena)
 
+    def buscar(self, valor):
+        for i in range(0, len(self.lista_vertices)):
+            if self.lista_vertices[i].get_valor() == valor:
+                return self.lista_vertices[i]
+        return None
+
+    def anchura(self, inicio):
+        visitados = []
+        cola = []
+        origen = self.buscar(inicio)
+        cola.append(origen)
+
+        while cola:
+            actual = cola.pop(0)
+
+            if actual not in visitados:
+                print(actual.get_valor(), end=' -')
+                visitados.append(actual)
+
+            # Si los vertices adyacentes no han sido visitados, agregar a la cola
+            for i in actual.get_lista_adyacentes():
+                if i not in visitados:
+                    cola.append(i)
+
 
 g = Grafo()
-g.agregar_vertice(1)
-g.agregar_vertice(2)
-g.agregar_vertice(3)
-g.agregar_vertice(4)
-g.agregar_vertice(5)
+g.agregar_vertice('A')
+g.agregar_vertice('B')
+g.agregar_vertice('C')
+g.agregar_vertice('D')
+g.agregar_vertice('H')
+g.agregar_vertice('T')
+g.agregar_vertice('R')
 
-g.enlazar(1, 2)
-g.enlazar(1, 3)
-g.enlazar(2, 3)
-g.enlazar(2, 4)
-g.enlazar(3, 5)
+g.enlazar('B', 'H')
+g.enlazar('C', 'R')
+g.enlazar('D', 'B')
+g.enlazar('D', 'C')
+g.enlazar('H', 'A')
+g.enlazar('H', 'T')
+g.enlazar('H', 'D')
+g.enlazar('R', 'H')
 
-g.recorrido_anchura()
-g.graficar()
+print('RECORRIDO POR ANCHURA')
+g.anchura('D')
+
