@@ -1,3 +1,4 @@
+import os
 
 class Vertice:
     def __init__(self, valor):
@@ -31,7 +32,6 @@ class Grafo:
         vertice = self.existe_vertice(valor)
         if vertice is None:
             self.lista_vertices.append(Vertice(valor))
-            #print('Nuevo vertice: ', valor)
         else:
             print('Ya existe')
 
@@ -45,12 +45,12 @@ class Grafo:
             origen.get_lista_adyacentes().append(destino)
 
     def graficar(self):
-        aux = []
-        cadena = ''
-        cadena += 'Digraph G {\n'
+        cadena = 'digraph G{\n'
+        cadena += "node[shape = \"record\"]\n"
 
+        aux = []
         for i in range(0, len(self.lista_vertices)):
-            temp= self.lista_vertices[i]
+            temp = self.lista_vertices[i]
             if aux.__contains__(temp) is False:
                 aux.append(temp)
                 cadena += f'node{hash(temp)} [label="{temp.get_valor()}" ]\n'
@@ -58,7 +58,12 @@ class Grafo:
                 cadena += f'node{hash(temp)} -> node{hash(temp.get_lista_adyacentes()[j])}\n'
 
         cadena += '}'
-        print(cadena)
+        file = open("Grafo.circo", "w")
+        file.write(cadena)
+        file.close()
+        os.system('circo -Tpng Grafo.circo -o Grafo.png')
+
+
 
     def buscar(self, valor):
         for i in range(0, len(self.lista_vertices)):
@@ -105,4 +110,5 @@ g.enlazar('R', 'H')
 
 print('RECORRIDO POR ANCHURA')
 g.anchura('D')
-
+print()
+g.graficar()
