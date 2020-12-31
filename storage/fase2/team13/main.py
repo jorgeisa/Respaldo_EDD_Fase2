@@ -46,14 +46,17 @@ def createDatabase(database, mode, encoding):
     print(j.createDatabase('database_encoding'))
     databases[database] = [mode, encoding]
 
-'''
+
 createDatabase('db1', 'avl', 'ascii')
 createDatabase('db2', 'b', 'utf8')
 createDatabase('db3', 'bplus', 'ascii')
-createDatabase('db4', 'json', 'utf8')'''
+createDatabase('db4', 'json', 'utf8')
 
+# THESE MODES DON'T WORK
+'''
 createDatabase('db7', 'hash', 'ascii')
 createDatabase('db5', 'dict', 'ascii')
 createDatabase('db6', 'isam', 'utf8')
+'''
 
 print(databases)
