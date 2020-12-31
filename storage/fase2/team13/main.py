@@ -59,4 +59,7 @@ createDatabase('db5', 'dict', 'ascii')
 createDatabase('db6', 'isam', 'utf8')
 '''
 
-print(databases)
+# SHOW DATABASES
+print('-- DATABASES --')
+for key in databases:
+    print(key, ":", databases[key])
