@@ -3,10 +3,10 @@
 # Notice:       Copyright (c) 2020 TytusDB Team
 # Developer:    Andree Avalos
 
-import modulo_bd as bd
-import modulo_table as tb
-import modulo_llaves as ky
-import modulo_carga as ld
+import DictMode.modulo_bd as bd
+import DictMode.modulo_table as tb
+import DictMode.modulo_llaves as ky
+import DictMode.modulo_carga as ld
 
 def createDatabase(database: str):
     return bd.createDatabase(database)
