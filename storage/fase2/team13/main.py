@@ -43,7 +43,7 @@ def check_mode(mode):
 def createDatabase(database, mode, encoding):
     j = check_mode(mode)
 
-    print(j.createDatabase('database_encoding'))
+    print(j.createDatabase(database))
     databases[database] = [mode, encoding]
 
 
