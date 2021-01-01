@@ -75,14 +75,23 @@ createDatabase('db4', 'json', 'utf8')
 createDatabase('db5', 'json', 'utf8')
 createDatabase('db1', 'b', 'utf8')
 
+# Modulos arregados
+createDatabase('db7', 'hash', 'ascii')
+createDatabase('db5', 'dict', 'ascii')
+createDatabase('db6', 'isam', 'utf8')
 
 # showMode('avl')
+showMode('isam')
+showMode('hash')
+showMode('avl')
+showMode('b')
 showMode('bplus')
 showMode('json')
-showMode('b')
+showMode('dict')
 
 
 # THESE MODES DON'T WORK
+# This imports has been uploaded
 '''
 createDatabase('db7', 'hash', 'ascii')
 createDatabase('db5', 'dict', 'ascii')

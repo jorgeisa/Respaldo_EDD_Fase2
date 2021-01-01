@@ -2,7 +2,7 @@
 # Notice:       Copyright (c) 2020 TytusDB Team
 # Developer:    Andree Avalos
 from .singleton import existTable, existDB, insertTable, showTBS, alterTB, dropTB
-from diccionario import Estructura
+from .diccionario import Estructura
 
 def createTable(database: str, table: str, numberColumns: int):
     try:
