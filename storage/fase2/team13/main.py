@@ -76,7 +76,7 @@ createDatabase('db5', 'json', 'utf8')
 createDatabase('db1', 'b', 'utf8')
 
 
-showMode('avl')
+# showMode('avl')
 showMode('bplus')
 showMode('json')
 showMode('b')

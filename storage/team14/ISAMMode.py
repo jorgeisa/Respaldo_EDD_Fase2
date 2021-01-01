@@ -1,5 +1,5 @@
-from team14.DataBase import DataBase
-from team14.Table import Table
+from .DataBase import DataBase
+from .Table import Table
 import os
 import pickle
 

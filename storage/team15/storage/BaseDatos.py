@@ -3,7 +3,7 @@
 # Copyright (c) 2020 TytusDb Team
 
 
-from storage import Tabla, serealizar
+from team15.storage import Tabla, serealizar
 import os, re
 
 table_name_pattern = "^[a-zA-Z_][a-zA-Z0-9#@$_]*"
