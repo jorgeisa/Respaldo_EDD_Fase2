@@ -4,13 +4,20 @@ modes = {}
 
 
 # SHOW DICTIONARY
-def show_Dict():
+def showDict():
     print('-- DATABASES --')
     for key in databases:
         print(key, ":", databases[key])
 
 
-def check_mode(mode):
+# SHOW MODE
+def showMode(mode):
+    j = modes.get(mode)
+    print(mode, j.showDatabases())
+
+
+# CHECK MODE
+def checkMode(mode):
     if mode == 'avl':
         print('mode_AVL')
         from storage.avl import avl_mode as j
@@ -56,45 +63,59 @@ def check_mode(mode):
 
 # CREATE DATABASE
 def createDatabase(database, mode, encoding):
-    j = check_mode(mode)
+    j = checkMode(mode)
 
     print(j.createDatabase(database))
     databases[database] = [mode, encoding]
 
 
-# SHOW MODE
-def showMode(mode):
+# ALTER DATABASEMODE
+def alterDatabaseMode(database, mode):
+    print('alterDatabaseMode: ')
     j = modes.get(mode)
-    print(mode, j.showDatabases())
+    actual_mode = modes.get(databases.get(database)[0])
+
+    if databases.get(database):
+        # UPDATING DICTIONARY MODE
+        databases.get(database)[0] = mode
+        # DELETING OLD MODE DATABASE
+        actual_mode.dropDatabase(database)
+        # CREATING NEW DATABASE
+        j.createDatabase(database)
+    else:
+        print('DB no existe')
 
 
 createDatabase('db1', 'avl', 'ascii')
 createDatabase('db2', 'avl', 'utf8')
+createDatabase('db6', 'b', 'utf8')
 createDatabase('db3', 'bplus', 'ascii')
+createDatabase('db8', 'dict', 'ascii')
+createDatabase('db9', 'isam', 'utf8')
 createDatabase('db4', 'json', 'utf8')
 createDatabase('db5', 'json', 'utf8')
-createDatabase('db1', 'b', 'utf8')
-
-# Modulos arregados
 createDatabase('db7', 'hash', 'ascii')
-createDatabase('db5', 'dict', 'ascii')
-createDatabase('db6', 'isam', 'utf8')
 
-# showMode('avl')
-showMode('isam')
-showMode('hash')
+
+#showDict()
+showMode('bplus')
+showMode('avl')
+alterDatabaseMode('db1', 'bplus')
+#showDict()
+showMode('bplus')
+showMode('avl')
+
+
+'''
+# SHOW MODES
 showMode('avl')
 showMode('b')
 showMode('bplus')
-showMode('json')
 showMode('dict')
+showMode('isam')
+showMode('json')
+showMode('hash')
 
-
-# THESE MODES DON'T WORK
-# This imports has been uploaded
+# SHOW DICT
+showDict()
 '''
-createDatabase('db7', 'hash', 'ascii')
-createDatabase('db5', 'dict', 'ascii')
-createDatabase('db6', 'isam', 'utf8')
-'''
-
