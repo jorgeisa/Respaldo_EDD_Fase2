@@ -17,7 +17,7 @@ class block:
         self._data = data
         self._previousHash = previousHash
         self._idHash = idHash
-        self.anterior = None
+        self._previousBlock = None
         self._checker = True
 
     def getIdBlock(self):
@@ -25,6 +25,12 @@ class block:
 
     def getData(self):
         return self._data
+
+    def getPreviousBlock(self):
+        return self._previousBlock
+
+    def setPreviousBlock(self, previousBlock):
+        self._previousBlock = previousBlock
 
     def setIdHash(self, idHash):
         self._idHash = idHash
@@ -38,7 +44,7 @@ class block:
         return info
 
     def verificarBloque(self):
-
+        print()
 
 
 class blockchain:
@@ -61,6 +67,15 @@ class blockchain:
         newBlock = block(self.idChain, [tupla.nombre, tupla.tupla], self.previous, id_hash)
         self.idChain += 1
         self.blocks_list.append(newBlock)
+
+        # Colocando todos los punteros al anterior bloque
+        if len(self.blocks_list) != 1:
+            for i in range(len(self.blocks_list)):
+                if i == (len(self.blocks_list)-1):
+                    self.blocks_list[i].setPreviousBlock(self.blocks_list[i-1])
+                    print("Actual:", self.blocks_list[i].getIdBlock())
+                    print("Anterior:", self.blocks_list[i].getPreviousBlock().getIdBlock())
+
         file = open("tabla1.json", "w+")
         file.write(json.dumps([j.getBlock() for j in self.blocks_list]))
         self.previous = id_hash
@@ -123,6 +138,11 @@ class blockchain:
                 graph += nodo + '->' + nextNodo + '\n'
             else:
                 graph += nodo + f'[label="{info}"]\n'
+
+            if not (i == 0):
+                nodoAnterior = "node" + str(self.blocks_list[i].getPreviousBlock().getIdBlock())
+                graph += nodo + '->' + nodoAnterior + "\n"
+
         return graph
 
 
