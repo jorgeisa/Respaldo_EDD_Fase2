@@ -29,6 +29,9 @@ class block:
     def getPreviousBlock(self):
         return self._previousBlock
 
+    def getIdHash(self):
+        return self._idHash
+
     def setPreviousBlock(self, previousBlock):
         self._previousBlock = previousBlock
 
@@ -44,7 +47,9 @@ class block:
         return info
 
     def verificarBloque(self):
-        print()
+        if self._previousBlock.getIdHash() == self._previousHash:
+            return True
+        return False
 
 
 class blockchain:
@@ -117,7 +122,7 @@ class blockchain:
     def graphBlockchain(self):
         graph = 'digraph G{\n'
         graph += 'rankdir=LR;\n'
-        graph += "node[shape = \"Msquare\"]\n"
+        graph += "node[shape = \"box\"]\n"
         graph += self.__graficar()
         graph += '}'
         file = open("BChain.dot", "w")
@@ -130,14 +135,20 @@ class blockchain:
         for i in range(len(self.blocks_list)):
             info = self.blocks_list[i].getInfoGraph()
             nodo = 'node' + str(self.blocks_list[i].getIdBlock())
+            color = "green"
+
+            if not (i == 0):
+                brokeChain = self.blocks_list[i].verificarBloque()
+                if not brokeChain:
+                    color = "red"
 
             if not (i == (len(self.blocks_list)-1)):
                 nextId = self.blocks_list[i+1].getIdBlock()
                 nextNodo = 'node' + str(nextId)
-                graph += nodo + f'[label="{info}"]\n'
+                graph += nodo + f'[label="{info}", color="{color}", fixedsize="false", height="1", width="1"]\n'
                 graph += nodo + '->' + nextNodo + '\n'
             else:
-                graph += nodo + f'[label="{info}"]\n'
+                graph += nodo + f'[label="{info}", color="{color}", fixedsize="false", height="1", width="1"]\n'
 
             if not (i == 0):
                 nodoAnterior = "node" + str(self.blocks_list[i].getPreviousBlock().getIdBlock())
