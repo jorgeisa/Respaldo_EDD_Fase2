@@ -1,0 +1,20 @@
+digraph G{
+rankdir=LR;
+node[shape = "box"]
+node1[label="Bloque: 1\nData: ['P1', ['id1', 34, 34.5]]\nHash Bloque: 71d0c5774dfa13f48697052c46a29cc4a6bc615b5c494d6c993d771bbbd7d8d7\nHash Ant.: 0", color="green", fixedsize="false", height="1", width="1"]
+node1->node2
+node2[label="Bloque: 2\nData: ['nuevoNombre', ['id2', 34, 34.5]]\nHash Bloque: c8aca9b7119bcca014ed6acd5095ab667eb135dd198e41056f3dc74db163ac6e\nHash Ant.: 71d0c5774dfa13f48697052c46a29cc4a6bc615b5c494d6c993d771bbbd7d8d7", color="green", fixedsize="false", height="1", width="1"]
+node2->node3
+node2->node1
+node3[label="Bloque: 3\nData: ['P3', ['id3', 34, 34.5]]\nHash Bloque: ef36d30cb66fdfc8abaa8b3a2ad3c563f3357e31992ad57cb482214ea7a4e37d\nHash Ant.: da69496688f182dccf550c0918f4f6e0f31c254b5702c58a9d38361c747124c9", color="red", fixedsize="false", height="1", width="1"]
+node3->node4
+node3->node2
+node4[label="Bloque: 4\nData: ['P4', ['id4', 34, 34.5]]\nHash Bloque: 5d6bb81de53a3015e8b9c67320250ae52345126fe57b44e529c57251372be047\nHash Ant.: ef36d30cb66fdfc8abaa8b3a2ad3c563f3357e31992ad57cb482214ea7a4e37d", color="green", fixedsize="false", height="1", width="1"]
+node4->node5
+node4->node3
+node5[label="Bloque: 5\nData: ['P5', ['id5', 34, 34.5]]\nHash Bloque: 11cd52c2f2a6d8a5adae3763caca1b5459438cc1e824f1ab04a72c4e697b3cd6\nHash Ant.: 5d6bb81de53a3015e8b9c67320250ae52345126fe57b44e529c57251372be047", color="green", fixedsize="false", height="1", width="1"]
+node5->node6
+node5->node4
+node6[label="Bloque: 6\nData: ['P6', ['id6', 34, 34.5]]\nHash Bloque: d462311bea70248955ed7ff0d16fe5c17a47a7fd82329c70fdac78169539cb8d\nHash Ant.: 11cd52c2f2a6d8a5adae3763caca1b5459438cc1e824f1ab04a72c4e697b3cd6", color="green", fixedsize="false", height="1", width="1"]
+node6->node5
+}
