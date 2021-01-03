@@ -1,5 +1,6 @@
 import json
 import hashlib
+import os
 import pickle
 import re
 
@@ -16,10 +17,28 @@ class block:
         self._data = data
         self._previousHash = previousHash
         self._idHash = idHash
+        self.anterior = None
         self._checker = True
+
+    def getIdBlock(self):
+        return self._idBlock
+
+    def getData(self):
+        return self._data
+
+    def setIdHash(self, idHash):
+        self._idHash = idHash
 
     def getBlock(self):
         return [self._idBlock, self._data, self._previousHash, self._idHash]
+
+    def getInfoGraph(self):
+        info = "Bloque: " + str(self._idBlock) + "\\nData: " + str(self._data) + "\\nHash Bloque: " + str(self._idHash)\
+               + "\\nHash Ant.: " + str(self._previousHash)
+        return info
+
+    def verificarBloque(self):
+
 
 
 class blockchain:
@@ -46,21 +65,68 @@ class blockchain:
         file.write(json.dumps([j.getBlock() for j in self.blocks_list]))
         self.previous = id_hash
 
-    def updateBlock(self, oldName, newName, tabla):
+    def updateBlock(self, oldName, newName, table):
+
+        # Cambiando valores de la lista y generando nuevo hash
+        newHash = ""
+        for tuple in table:
+            if tuple.nombre == oldName:
+                tuple.nombre = newName
+                newHash = self.generateHash(tuple)
+
         file = open("tabla1.json", "r")
-        block_list = json.loads(file.read())
+        JSblock_list = json.loads(file.read())
         file.close()
 
-        for block in block_list:
-            if oldName == block[1][0]:
-                block[1][0] = newName
-                # print(self.generateHash(block[0]))
+        # Imprimiendo tuplas de personas
+        for persona in table:
+            print("\n", persona.nombre)
+            print(persona.tupla)
+
+        # Recorriendo JSON
+        for blockJS in JSblock_list:
+            if oldName == blockJS[1][0]:
+                blockJS[1][0] = newName
+                blockJS[3] = newHash
+
+        # Imprimiendo tuplas de personas
+        for block in self.blocks_list:
+            if oldName == block.getData()[0]:
+                block.getData()[0] = newName
+                block.setIdHash(newHash)
 
         file = open("tabla1.json", "w+")
-        file.write(json.dumps(block_list))
+        file.write(json.dumps(JSblock_list))
         file.close()
 
+    def graphBlockchain(self):
+        graph = 'digraph G{\n'
+        graph += 'rankdir=LR;\n'
+        graph += "node[shape = \"Msquare\"]\n"
+        graph += self.__graficar()
+        graph += '}'
+        file = open("BChain.dot", "w")
+        file.write(graph)
+        file.close()
+        os.system('dot -Tpng BChain.dot -o BChain.png')
 
+    def __graficar(self):
+        graph = ""
+        for i in range(len(self.blocks_list)):
+            info = self.blocks_list[i].getInfoGraph()
+            nodo = 'node' + str(self.blocks_list[i].getIdBlock())
+
+            if not (i == (len(self.blocks_list)-1)):
+                nextId = self.blocks_list[i+1].getIdBlock()
+                nextNodo = 'node' + str(nextId)
+                graph += nodo + f'[label="{info}"]\n'
+                graph += nodo + '->' + nextNodo + '\n'
+            else:
+                graph += nodo + f'[label="{info}"]\n'
+        return graph
+
+
+print("\\n")
 B = blockchain()
 persona1 = persona("P1", ["id1", 34, 34.5])
 persona2 = persona("P2", ["id2", 34, 34.5])
@@ -81,6 +147,4 @@ for i in tabla1:
     B.insertBlock(i)
 
 B.updateBlock("P2", "nuevoNombre", tabla1)
-
-
-
+B.graphBlockchain()
