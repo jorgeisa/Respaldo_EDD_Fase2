@@ -2,29 +2,49 @@ from Funciones import *
 
 
 def test():
-    createDatabase('db6', 'b', 'utf8')
-    createDatabase('db6', 'b', 'utf8')
-    createDatabase('db3', 'bplus', 'ascii')
-    createDatabase('db1', 'avl', 'ascii')
-    createDatabase('db2', 'avl', 'utf8')
-    #createDatabase('db8', 'dict', 'ascii')
-    createDatabase('db9', 'isam', 'utf8')
-    createDatabase('db4', 'json', 'utf8')
-    createDatabase('db5', 'json', 'utf8')
-    createDatabase('db7', 'hash', 'ascii')
-    createDatabase('db9', 'hash', 'ascii')
 
-    createTable('db6', 'Table1', 3, 'b')
-    createTable('db6', 'Table2', 3, 'b')
-    createTable('db3', 'Table1', 3, 'bplus')
-    createTable('db3', 'Table2', 3, 'b')
+    print('#'*10 + '  DATABASES  ')
+    print(createDatabase('db6', 'b', 'utf8'), end='-')
+    print(createDatabase('db6', 'bplus', 'ascii'), end='-')  # 2, exist db
+    print(createDatabase('db1', 'avl', 'asci'), end='-')     # 4, encoding incorrect
+    print(createDatabase('db2', 'avl', 'utf8'), end='-')
+    print(createDatabase('db8', 'isam', 'utf8'), end='-')
+    print(createDatabase('db4', 'jsona', 'utf8'), end='-')  # 3, mode incorrect
+    print(createDatabase('db5', 'json', 'utf8'), end='-')
+    print(createDatabase('db7', 'hash', 'ascii'))
 
-    insert('db6', 'Table1', ['A1', 'B1', 'C1'], 'b')
-    insert('db6', 'Table1', ['A2', 'B2', 'C2'], 'b')
-    insert('db6', 'Table1', ['A3', 'B3', 'C3'], 'b')
+    print('#'*10 + '  TABLES  ')
+    print(createTable('db6', 'Table1', 3), end='-')
+    print(createTable('db6', 'Table2', 3), end='-')
+    print(createTable('db6', 'Table3', 3), end='-')
+    print(createTable('db7', 'Table1', 3), end='-')
+    print(createTable('db7', 'Table2', 3))
 
-    insert('db6', 'Table2', ['A12', 'B12', 'C12'], 'b')
-    insert('db6', 'Table2', ['A22', 'B22', 'C22'], 'b')
-    insert('db6', 'Table2', ['A32', 'B32', 'C32'], 'b')
+    print('#' * 10 + '  REGISTERS  ')
+    print('DB6 - TABLE1', end=': ')
+    print(insert('db66', 'Table1', ['A1', 'B1', 'C1']), end='-')  # 2, database doesn't exist
+    print(insert('db6', 'Table1', ['A2', 'B2', 'C2']), end='-')
+    print(insert('db6', 'Table1', ['A3', 'B3', 'C3']))
+
+    print('DB6 - TABLE2', end=': ')
+    print(insert('db6', 'Table2', ['A12', 'B12', 'C12']), end='-')
+    print(insert('db6', 'Table2', ['A22', 'B22', 'C22']), end='-')
+    print(insert('db6', 'Table2', ['A32', 'B32', 'C32']))
+
+    print('#' * 10 + '  ALTER_DATABASE_MODE')
+    print('BEFORE')
+    dictionary = load('metadata')
+    showDict(dictionary)
+    showMode('b')
+    showMode('bplus')
+
+    print('alterDatabaseMode: ', alterDatabaseMode('db6', 'bplus'))
+    print('AFTER')
+    dictionary = load('metadata')
+    showDict(dictionary)
+    showMode('b')
+    showMode('bplus')
+
 
 test()
+
