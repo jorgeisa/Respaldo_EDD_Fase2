@@ -14,11 +14,11 @@ def test():
     print(createDatabase('db7', 'hash', 'ascii'))
 
     print('#'*10 + '  TABLES  ')
-    print(createTable('db6', 'Table1', 3), end='-')
-    print(createTable('db6', 'Table2', 3), end='-')
-    print(createTable('db6', 'Table3', 3), end='-')
-    print(createTable('db7', 'Table1', 3), end='-')
-    print(createTable('db7', 'Table2', 3))
+    print(createTable('db6', 'Table1_DB6', 3), end='-')
+    print(createTable('db6', 'Table2_DB6', 2), end='-')
+    print(createTable('db6', 'Table3_DB6', 4), end='-')
+    print(createTable('db7', 'Table1_DB7', 4), end='-')
+    print(createTable('db7', 'Table2_DB7', 3))
 
     print('#' * 10 + '  REGISTERS  ')
     print('DB6 - TABLE1', end=': ')
@@ -45,6 +45,13 @@ def test():
     showMode('b')
     showMode('bplus')
 
+    j = checkMode('b')
+    print('MODE B - DB6: ', j.showTables('db6'))
+
+    j = checkMode('bplus')
+    print('MODE BPLUS - DB6', j.showTables('db6'))
+
 
 test()
+
 
