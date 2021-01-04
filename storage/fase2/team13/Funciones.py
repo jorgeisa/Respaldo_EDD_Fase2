@@ -199,7 +199,7 @@ def createTable(database, table, numberColumns):
 
         if value_return == 0:
             dict_tables = dictionary.get(database)[2]
-            dict_tables[table] = [numberColumns]
+            dict_tables[table] = [numberColumns, False]
             save(dictionary, 'metadata')
 
         return value_return
@@ -276,7 +276,7 @@ def alterDropPK(database, table):
         value_base = dictionary.get(database)
         if not value_base:
             return 2
-        
+
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.alterDropPK(database, table)
