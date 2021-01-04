@@ -63,63 +63,7 @@ def alterDatabaseMode(database, mode):
         return 1
 
 
-# ALTER FOREIGN KEY
-def alterTableAddFK(database, table, indexName, columns, tableRef, columnsRef):
-    try:
-        if os.path.isfile(os.getcwd() + "\\Data\\FK.bin"):
-            FK = load('FK')
-        else:
-            FK = {}
-        db = load('metadata')
-        if db.get(database) is not None:
-            j = checkMode(db[database][0])
-            tables = j.showTables(database)
-            if (table in tables) and (tableRef in tables):
-                if len(columns) != 0 and len(columnsRef) != 0:
-                    if FK.get(indexName) is not None:
-                        return 6
-                    FK.update({indexName: [database, indexName, table, columns, tableRef, columnsRef]})
-                    save(FK, 'FK')
-                    return 0
-                return 4
-            return 3
-        return 2
-    except:
-        return 1
-
-
-# DROP FOREIGN KEY
-def alterTableDropFK(database, table, indexName):
-    try:
-        if os.path.isfile(os.getcwd() + "\\Data\\FK.bin"):
-            FK = load('FK')
-            db = load('metadata')
-            if db.get(database) is not None:
-                j = checkMode(db[database][0])
-                tables = j.showTables(database)
-                if table in tables:
-                    if FK.get(indexName) is not None:
-                        FK.pop(indexName)
-                        save(FK, 'FK')
-                        return 0
-                    return 4
-                return 3
-            return 2
-        else:
-            FK = {}
-            save(FK, 'FK')
-    except:
-        return 1
-
-
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
-# SHOW DICTIONARY FK
-def showFK(dictionary):
-    print('--FOREIGN KEYS--')
-    for key in dictionary:
-        print(key, ':', dictionary[key])
-
-
 # SHOW DICTIONARY
 def showDict(dictionary):
     print('-- DATABASES --')
@@ -404,7 +348,7 @@ def alterDropColumn(database, table, columnNumber):
         if value_return == 0:
             dict_tables = dictionary.get(database)[2]
             number_columns = dict_tables.get(table)[0]
-            dict_tables.get(table)[0] = number_columns - 1  # Updating number of columns
+            dict_tables.get(table)[0] = number_columns-1  # Updating number of columns
 
             save(dictionary, 'metadata')
 
@@ -413,7 +357,7 @@ def alterDropColumn(database, table, columnNumber):
         return 1
 
 
-def dropTable(database, table):
+def dropTable(database, table) :
     try:
         dictionary = load('metadata')
 
@@ -435,13 +379,13 @@ def dropTable(database, table):
 
 # -------------------------------------------------- Tuples CRUD -------------------------------------------------------
 
-def insert(database, table, register):
+def insert(database, table, register):    
     try:
         dictionary = load('metadata')
-
+        
         if dictionary.get(database) is None:
             return 2  # database doesn't exist
-
+        
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.insert(database, table, register)
