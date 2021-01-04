@@ -287,7 +287,6 @@ def dropTable(database, table) :
         return 1
 
 
-
 # -------------------------------------------------- Tuples CRUD -------------------------------------------------------
 
 def insert(database, table, register):    
