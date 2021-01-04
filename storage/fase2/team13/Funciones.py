@@ -28,7 +28,7 @@ def createDatabase(database, mode, encoding):
             if value_return == 1:
                 return 1
 
-            dictionary[database] = [mode, encoding]
+            dictionary[database] = [mode, encoding, {}]
             save(dictionary, 'metadata')
             return 0
     else:
@@ -37,7 +37,7 @@ def createDatabase(database, mode, encoding):
         if value_return == 1:
             return 1
 
-        databases[database] = [mode, encoding]
+        databases[database] = [mode, encoding, {}]
         save(databases,  'metadata')
         return 0
 
@@ -49,6 +49,7 @@ def alterDatabaseMode(database, mode):
         value_db = dictionary.get(database)
         actual_mode = dictionary.get(database)[0]
         encoding = dictionary.get(database)[1]
+        dict_tables = dictionary.get(database)[2]
 
         if value_db is None:
             return 2  # database doesn't exist
@@ -57,7 +58,7 @@ def alterDatabaseMode(database, mode):
 
         insertAgain(database, actual_mode, mode)
         dictionary.pop(database)
-        dictionary[database] = [mode, encoding]
+        dictionary[database] = [mode, encoding, dict_tables]
         save(dictionary, 'metadata')
         return 0
     except:
@@ -110,27 +111,35 @@ def checkMode(mode):
 
 
 def insertAgain(database, mode, newMode):
-    j = checkMode(mode)
+    old_mode = checkMode(mode)
     new_mode = checkMode(newMode)
     new_mode.createDatabase(database)
-    tables = j.showTables(database)
+    tables = old_mode.showTables(database)
+
+    dictionary = load('metadata')
+    dict_tables = dictionary.get(database)[2]
 
     if tables:
         for name_table in tables:
-            register = j.extractTable(database, name_table)  # [['A', '1'], ['B', '2'],  ['C', '3']]
+            register = old_mode.extractTable(database, name_table)  # [['A', '1'], ['B', '2'],  ['C', '3']]
+            number_columns = dict_tables.get(name_table)[0]
+            new_mode.createTable(database, name_table, number_columns)
 
             if register:  # There are registers
-                new_mode.createTable(database, name_table, len(register[0]))
-                for list_register in j.extractTable(database, name_table):
+                for list_register in old_mode.extractTable(database, name_table):
                     new_mode.insert(database, name_table, list_register)
 
-        j.dropDatabase(database)
+        old_mode.dropDatabase(database)
 
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 def createTable(database, table, numberColumns):
     dictionary = load('metadata')
     try:
+        dict_tables = dictionary.get(database)[2]
+        dict_tables[table] = [numberColumns]
+        save(dictionary, 'metadata')
+
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.createTable(database, table, numberColumns)
@@ -176,4 +185,3 @@ def load(nombre):
     objeto = file.read()
     file.close()
     return pickle.loads(objeto)
-
