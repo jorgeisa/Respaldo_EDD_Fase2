@@ -133,6 +133,8 @@ def insertAgain(database, mode, newMode):
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
 
+# createDatabase was modified in this fase
+
 def showDatabases(database):
     try:
         dictionary = load('metadata')
@@ -191,13 +193,15 @@ def createTable(database, table, numberColumns):
         if dictionary.get(database) is None:
             return 2  # database doesn't exist
 
-        dict_tables = dictionary.get(database)[2]
-        dict_tables[table] = [numberColumns]
-        save(dictionary, 'metadata')
-
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.createTable(database, table, numberColumns)
+
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            dict_tables[table] = [numberColumns]
+            save(dictionary, 'metadata')
+
         return value_return
     except:
         return 1
@@ -208,7 +212,7 @@ def showTables(database):
         dictionary = load('metadata')
 
         if dictionary.get(database) is None:
-            return 2  # database doesn't exist
+            return None  # database doesn't exist
 
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
@@ -216,6 +220,38 @@ def showTables(database):
         return value_return
     except:
         return 1
+
+
+def extractTable(database, table):
+    try:
+        database = str(database)
+        table = str(table)
+        dictionary = load('metadata')
+        value_base = dictionary.get(database)
+        if not value_base:
+            return None
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.extractTable(database, table)
+        return value_return
+    except:
+        return None
+
+
+def extractRangeTable(database, table, columnNumber, lower, upper):
+    try:
+        database = str(database)
+        table = str(table)
+        dictionary = load('metadata')
+        value_base = dictionary.get(database)
+        if not value_base:
+            return None
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
+        return value_return
+    except:
+        return None
 
 
 def alterAddPK(database, table, columns):
@@ -236,12 +272,66 @@ def alterAddPK(database, table, columns):
 def alterDropPK(database, table):
     try:
         dictionary = load('metadata')
+
+        value_base = dictionary.get(database)
+        if not value_base:
+            return 2
+        
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.alterDropPK(database, table)
         return value_return
     except:
         return 2
+
+
+def alterTable(database, tableOld, tableNew):
+    try:
+        database = str(database)
+        tableOld = str(tableOld)
+        tableNew = str(tableNew)
+        dictionary = load('metadata')
+        value_base = dictionary.get(database)
+        if not value_base:
+            return 2
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.alterTable(database, tableOld, tableNew)
+
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            infoTabla = dict_tables[tableOld]
+            dict_tables.pop(tableOld)
+            dict_tables[tableNew] = infoTabla
+            save(dictionary, 'metadata')
+        return value_return
+    except:
+        return 1
+
+
+def alterAddColumn(database, table, default):
+    try:
+        database = str(database)
+        table = str(table)
+        dictionary = load('metadata')
+
+        value_base = dictionary.get(database)
+        if not value_base:
+            return 2
+
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.alterDropColumn(database, table, default)
+
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            number_columns = dict_tables.get(table)[0]
+            dict_tables.get(table)[0] = number_columns + 1
+            save(dictionary, 'metadata')
+
+        return value_return
+    except:
+        return 1
 
 
 def alterDropColumn(database, table, columnNumber):
