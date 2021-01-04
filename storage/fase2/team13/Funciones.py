@@ -158,6 +158,64 @@ def insert(database, table, register):
     except:
         return 2  # database doesn't exist
 
+def loadCSV(file, database, table):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.loadCSV(file, database, table)
+        return value_return
+    except:
+        return []
+
+def insert(database, table, register):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.insert(database, table, register)
+        return value_return
+    except:
+        return 2  # database doesn't exist
+
+def extractRow(database, table, columns):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.extractRow(database, table, columns)
+        return value_return
+    except:
+        return []
+
+def update(database, table, register, columns):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.update(database, table, register, columns)
+        return value_return
+    except:
+        return 1
+
+def delete(database, table, columns):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.delete(database, table, columns)
+        return value_return
+    except:
+        return 1
+
+def truncate(database, table):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.truncate(database, table)
+    except:
+        return 1
 
 def showTables(database):
     dictionary = load('metadata')
