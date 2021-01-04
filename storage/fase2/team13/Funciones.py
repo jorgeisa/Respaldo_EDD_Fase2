@@ -185,8 +185,12 @@ def dropDatabase(database):
 # -------------------------------------------------- Table CRUD --------------------------------------------------------
 
 def createTable(database, table, numberColumns):
-    dictionary = load('metadata')
     try:
+        dictionary = load('metadata')
+
+        if dictionary.get(database) is None:
+            return 2  # database doesn't exist
+
         dict_tables = dictionary.get(database)[2]
         dict_tables[table] = [numberColumns]
         save(dictionary, 'metadata')
@@ -196,31 +200,109 @@ def createTable(database, table, numberColumns):
         value_return = j.createTable(database, table, numberColumns)
         return value_return
     except:
-        return 2  # database doesn't exist
+        return 1
 
 
 def showTables(database):
-    dictionary = load('metadata')
     try:
+        dictionary = load('metadata')
+
+        if dictionary.get(database) is None:
+            return 2  # database doesn't exist
+
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.showTables(database)
         return value_return
     except:
-        return 2  # database doesn't exist
+        return 1
+
+
+def alterAddPK(database, table, columns):
+    try:
+        dictionary = load('metadata')
+
+        if dictionary.get(database) is None:
+            return 2  # database doesn't exist
+
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.alterAddPK(database, table, columns)
+        return value_return
+    except:
+        return 1
+
+
+def alterDropPK(database, table):
+    try:
+        dictionary = load('metadata')
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.alterDropPK(database, table)
+        return value_return
+    except:
+        return 2
+
+
+def alterDropColumn(database, table, columnNumber):
+    try:
+        dictionary = load('metadata')
+
+        if dictionary.get(database) is None:
+            return 2  # database doesn't exist
+
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.alterDropColumn(database, table, columnNumber)
+
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            number_columns = dict_tables.get(table)[0]
+            dict_tables.get(table)[0] = number_columns-1  # Updating number of columns
+
+            save(dictionary, 'metadata')
+
+        return value_return
+    except:
+        return 1
+
+
+def dropTable(database, table) :
+    try:
+        dictionary = load('metadata')
+
+        if dictionary.get(database) is None:
+            return 2  # database doesn't exist
+
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.dropTable(database, table)
+
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            dict_tables.pop(table)
+
+            save(dictionary, 'metadata')
+    except:
+        return 1
+
 
 
 # -------------------------------------------------- Tuples CRUD -------------------------------------------------------
 
-def insert(database, table, register):
-    dictionary = load('metadata')
+def insert(database, table, register):    
     try:
+        dictionary = load('metadata')
+        
+        if dictionary.get(database) is None:
+            return 2  # database doesn't exist
+        
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.insert(database, table, register)
         return value_return
     except:
-        return 2  # database doesn't exist
+        return 1
 
 
 def loadCSV(file, database, table):
