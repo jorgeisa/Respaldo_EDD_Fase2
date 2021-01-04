@@ -2,7 +2,6 @@ import os
 import pickle
 import shutil
 
-
 databases = {}  # LIST WITH DIFFERENT MODES
 dict_encoding = {'ascii': 1, 'iso-8859-1': 2, 'utf8': 3}
 dict_modes = {'avl': 1, 'b': 2, 'bplus': 3, 'dict': 4, 'isam': 5, 'json': 6, 'hash': 7}
@@ -11,7 +10,6 @@ dict_modes = {'avl': 1, 'b': 2, 'bplus': 3, 'dict': 4, 'isam': 5, 'json': 6, 'ha
 # ---------------------------------------------------- FASE 2  ---------------------------------------------------------
 # CREATE DATABASE
 def createDatabase(database, mode, encoding):
-
     if dict_modes.get(mode) is None:
         return 3  # mode incorrect
     elif dict_encoding.get(encoding) is None:
@@ -38,7 +36,7 @@ def createDatabase(database, mode, encoding):
             return 1
 
         databases[database] = [mode, encoding, {}]
-        save(databases,  'metadata')
+        save(databases, 'metadata')
         return 0
 
 
@@ -133,6 +131,59 @@ def insertAgain(database, mode, newMode):
 
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
+# -------------------------------------------------- Data Base CRUD ----------------------------------------------------
+
+def showDatabases(database):
+    try:
+        dictionary = load('metadata')
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.showDatabases()
+        return value_return
+    except:
+        return []
+
+
+def alterDatabase(databaseOld, databaseNew):
+    try:
+        dictionary = load('metadata')
+        value_dbO = dictionary.get(str(databaseOld))
+        value_dbN = dictionary.get(str(databaseNew))
+        if not value_dbO:
+            return 2
+        if value_dbN:
+            return 3
+        mode = dictionary.get(str(databaseOld))[0]
+        j = checkMode(mode)
+        value_return = j.alterDatabase(databaseOld, databaseNew)
+        if value_return == 0:
+            info = dictionary[str(databaseOld)]
+            dictionary.pop(str(databaseOld))
+            dictionary[str(databaseNew)] = info
+            save(dictionary, 'metadata')
+        return value_return
+    except:
+        return 1
+
+
+def dropDatabase(database):
+    try:
+        nombreBase = str(database)
+        dictionary = load('metadata')
+        value_base = dictionary.get(nombreBase)
+        if value_base:
+            mode = dictionary.get(nombreBase)[0]
+            j = checkMode(mode)
+            j.dropDatabase(nombreBase)
+            dictionary.pop(nombreBase)
+            save(dictionary, 'metadata')
+        return 2
+    except:
+        return 1
+
+
+# -------------------------------------------------- Table CRUD --------------------------------------------------------
+
 def createTable(database, table, numberColumns):
     dictionary = load('metadata')
     try:
@@ -148,6 +199,19 @@ def createTable(database, table, numberColumns):
         return 2  # database doesn't exist
 
 
+def showTables(database):
+    dictionary = load('metadata')
+    try:
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        value_return = j.showTables(database)
+        return value_return
+    except:
+        return 2  # database doesn't exist
+
+
+# -------------------------------------------------- Tuples CRUD -------------------------------------------------------
+
 def insert(database, table, register):
     dictionary = load('metadata')
     try:
@@ -157,6 +221,7 @@ def insert(database, table, register):
         return value_return
     except:
         return 2  # database doesn't exist
+
 
 def loadCSV(file, database, table):
     dictionary = load('metadata')
@@ -168,15 +233,6 @@ def loadCSV(file, database, table):
     except:
         return []
 
-def insert(database, table, register):
-    dictionary = load('metadata')
-    try:
-        mode = dictionary.get(database)[0]
-        j = checkMode(mode)
-        value_return = j.insert(database, table, register)
-        return value_return
-    except:
-        return 2  # database doesn't exist
 
 def extractRow(database, table, columns):
     dictionary = load('metadata')
@@ -188,6 +244,7 @@ def extractRow(database, table, columns):
     except:
         return []
 
+
 def update(database, table, register, columns):
     dictionary = load('metadata')
     try:
@@ -197,6 +254,7 @@ def update(database, table, register, columns):
         return value_return
     except:
         return 1
+
 
 def delete(database, table, columns):
     dictionary = load('metadata')
@@ -208,6 +266,7 @@ def delete(database, table, columns):
     except:
         return 1
 
+
 def truncate(database, table):
     dictionary = load('metadata')
     try:
@@ -216,16 +275,6 @@ def truncate(database, table):
         value_return = j.truncate(database, table)
     except:
         return 1
-
-def showTables(database):
-    dictionary = load('metadata')
-    try:
-        mode = dictionary.get(database)[0]
-        j = checkMode(mode)
-        value_return = j.showTables(database)
-        return value_return
-    except:
-        return 2  # database doesn't exist
 
 
 # ------------------------------------------------------- FILES --------------------------------------------------------
