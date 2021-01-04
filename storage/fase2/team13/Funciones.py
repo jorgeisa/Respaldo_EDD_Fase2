@@ -62,8 +62,61 @@ def alterDatabaseMode(database, mode):
     except:
         return 1
 
+# ALTER FOREIGN KEY
+def alterTableAddFK(database, table, indexName, columns, tableRef, columnsRef):
+    try:
+        if os.path.isfile(os.getcwd() + "\\Data\\FK.bin"):
+            FK = load('FK')
+        else:
+            FK = {}
+        db = load('metadata')
+        if db.get(database) is not None:
+            j = checkMode(db[database][0])
+            tables = j.showTables(database)
+            if (table in tables) and (tableRef in tables):
+                if len(columns) != 0 and len(columnsRef) != 0:
+                    if FK.get(indexName) is not None:
+                        return 6
+                    FK.update({indexName: [database, indexName, table, columns, tableRef, columnsRef]})
+                    save(FK, 'FK')
+                    return 0
+                return 4
+            return 3
+        return 2
+    except:
+        return 1
+
+
+# DROP FOREIGN KEY
+def alterTableDropFK(database, table, indexName):
+    try:
+        if os.path.isfile(os.getcwd() + "\\Data\\FK.bin"):
+            FK = load('FK')
+            db = load('metadata')
+            if db.get(database) is not None:
+                j = checkMode(db[database][0])
+                tables = j.showTables(database)
+                if table in tables:
+                    if FK.get(indexName) is not None:
+                        FK.pop(indexName)
+                        save(FK, 'FK')
+                        return 0
+                    return 4
+                return 3
+            return 2
+        else:
+            FK = {}
+            save(FK, 'FK')
+    except:
+        return 1
 
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
+# SHOW DICTIONARY FK
+def showFK(dictionary):
+    print('--FOREIGN KEYS--')
+    for key in dictionary:
+        print(key, ':', dictionary[key])
+
 # SHOW DICTIONARY
 def showDict(dictionary):
     print('-- DATABASES --')
