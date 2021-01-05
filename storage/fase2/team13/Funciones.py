@@ -1,6 +1,7 @@
 import os
 import pickle
 import shutil
+# from .Blockchain import Blockchain as BChain
 
 databases = {}  # LIST WITH DIFFERENT MODES
 dict_encoding = {'ascii': 1, 'iso-8859-1': 2, 'utf8': 3}
@@ -61,6 +62,35 @@ def alterDatabaseMode(database, mode):
         return 0
     except:
         return 1
+
+
+# Blockchain
+def securityMode(database, table):
+    try:
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+
+        # If db doesn't exist
+        if not value_db:
+            return 2
+
+        # If tables doesn't exit
+        dict_tables = dictionary.get(database)[2]
+        if not dict_tables:
+            return 3
+
+        # If table doesn't exist
+        tabla_info = dict_tables.get(table)
+        if not table:
+            return 4
+        tabla_info[1] = True
+        save(dictionary, 'metadata')
+        return 0
+    except:
+        return 1
+
+
+
 
 
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------

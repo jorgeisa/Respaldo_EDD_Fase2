@@ -2,24 +2,32 @@
 from Funciones import *
 
 
-def test():
+def testDict():
+    dict = {"valor1": [1, 2, 3], "valor2": [4, 5, 6]}
+    dict.update({"valor1": [0, 0, 0, 0, 0, 0, 0]})
+    dict.get("valor2")[2] = 888
+    print(dict)
 
-    print('#'*10 + '  DATABASES  ')
+
+def test():
+    print('#' * 10 + '  DATABASES  ')
     print(createDatabase('db6', 'b', 'utf8'), end='-')
     print(createDatabase('db6', 'bplus', 'ascii'), end='-')  # 2, exist db
-    print(createDatabase('db1', 'avl', 'asci'), end='-')     # 4, encoding incorrect
+    print(createDatabase('db1', 'avl', 'asci'), end='-')  # 4, encoding incorrect
     print(createDatabase('db2', 'avl', 'utf8'), end='-')
     print(createDatabase('db8', 'isam', 'utf8'), end='-')
     print(createDatabase('db4', 'jsona', 'utf8'), end='-')  # 3, mode incorrect
     print(createDatabase('db5', 'json', 'utf8'), end='-')
     print(createDatabase('db7', 'hash', 'ascii'))
 
-    print('#'*10 + '  TABLES  ')
+    print('#' * 10 + '  TABLES  ')
     print(createTable('db6', 'Table1_DB6', 3), end='-')
     print(createTable('db6', 'Table2_DB6', 2), end='-')
     print(createTable('db6', 'Table3_DB6', 4), end='-')
     print(createTable('db7', 'Table1_DB7', 4), end='-')
     print(createTable('db7', 'Table2_DB7', 3))
+
+    print(securityMode("db6", "Table1_DB6"))
 
     print('#' * 10 + '  REGISTERS  ')
     print('DB6 - TABLE1', end=': ')
@@ -52,7 +60,9 @@ def test():
     j = checkMode('bplus')
     print('MODE BPLUS - DB6', j.showTables('db6'))
 
+    print("#" * 20, "Mostrando informacion de diccionario", "#" * 20)
+    dictionary = load('metadata')
+    showDict(dictionary)
 
 test()
-
-
+# testDict()
