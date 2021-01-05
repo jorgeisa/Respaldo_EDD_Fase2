@@ -83,7 +83,17 @@ def securityMode(database, table):
         tabla_info = dict_tables.get(table)
         if not table:
             return 4
-        tabla_info[1] = True
+
+        if tabla_info[1] is False:
+            tabla_info[1] = True
+            if tabla_info[2] is None:
+                mode = dictionary.get(database)[0]
+                j = checkMode(mode)
+                list_tuple = j.extractTable(database, table)
+                BChain = make_block_chain(list_tuple, database, table)
+                tabla_info[2] = BChain
+        else:
+            tabla_info[1] = False
         save(dictionary, 'metadata')
         return 0
     except:
@@ -157,8 +167,12 @@ def insertAgain(database, mode, newMode):
 
 
 # Blockchain mode when the security mode is on
-def block_chainDo():
-    print()
+def make_block_chain(list_tuple, nameDatabase, nameTable):
+    # list_tuple = [['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']]
+    BChain = Blockchain()
+    for tuple in list_tuple:
+        BChain.insertBlock(tuple, nameDatabase, nameTable)
+    return BChain
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
@@ -229,7 +243,8 @@ def createTable(database, table, numberColumns):
 
         if value_return == 0:
             dict_tables = dictionary.get(database)[2]
-            dict_tables[table] = [numberColumns, False]
+            Bchain = None
+            dict_tables[table] = [numberColumns, False, Bchain]
             save(dictionary, 'metadata')
 
         return value_return

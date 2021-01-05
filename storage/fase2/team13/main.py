@@ -1,5 +1,6 @@
 # This is the test for the branch BlockchainFunction
 from Funciones import *
+import os
 
 
 def testDict():
@@ -7,6 +8,15 @@ def testDict():
     dict.update({"valor1": [0, 0, 0, 0, 0, 0, 0]})
     dict.get("valor2")[2] = 888
     print(dict)
+    # print(os.getcwd() + "\\Data")
+    # os.mkdir(os.getcwd() + "/Data")
+    # os.mkdir(os.getcwd() + '/data/jsonBC')
+    if os.path.isdir(os.getcwd() + "\\Data\\jsonBC"):
+        print(True)
+    else:
+        os.makedirs(os.getcwd() + "\\Data\\JsonBC")
+        # os.mkdir(os.getcwd() + "\\Data\\Json")
+        print(False)
 
 
 def test():
@@ -27,18 +37,21 @@ def test():
     print(createTable('db7', 'Table1_DB7', 4), end='-')
     print(createTable('db7', 'Table2_DB7', 3))
 
-    print(securityMode("db6", "Table1_DB6"))
-
     print('#' * 10 + '  REGISTERS  ')
     print('DB6 - TABLE1', end=': ')
-    print(insert('db66', 'Table1', ['A1', 'B1', 'C1']), end='-')  # 2, database doesn't exist
-    print(insert('db6', 'Table1', ['A2', 'B2', 'C2']), end='-')
-    print(insert('db6', 'Table1', ['A3', 'B3', 'C3']))
+    print(insert('db66', 'Table1_DB6', ['A1', 'B1', 'C1']), end='-')  # 2, database doesn't exist
+    print(insert('db6', 'Table1_DB6', ['A2', 'B2', 'C2']), end='-')
+    print(insert('db6', 'Table1_DB6', ['A3', 'B3', 'C3']))
 
     print('DB6 - TABLE2', end=': ')
     print(insert('db6', 'Table2', ['A12', 'B12', 'C12']), end='-')
     print(insert('db6', 'Table2', ['A22', 'B22', 'C22']), end='-')
     print(insert('db6', 'Table2', ['A32', 'B32', 'C32']))
+
+    print(securityMode("db6", "Table1_DB6"))
+
+    print('#' * 20, 'Probando Extract Table', '#' * 20)
+    print(extractTable('db6', 'Table1_DB6'))
 
     print('#' * 10 + '  ALTER_DATABASE_MODE')
     print('BEFORE')
@@ -60,9 +73,13 @@ def test():
     j = checkMode('bplus')
     print('MODE BPLUS - DB6', j.showTables('db6'))
 
+    print()
     print("#" * 20, "Mostrando informacion de diccionario", "#" * 20)
     dictionary = load('metadata')
     showDict(dictionary)
+
+    # print("#" * 20, "Probando Blockchain", "#" * 20)
+    # make_block_chain()
 
 test()
 # testDict()

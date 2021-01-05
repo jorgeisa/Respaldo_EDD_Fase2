@@ -3,7 +3,7 @@ import hashlib
 import os
 import pickle
 import re
-
+import shutil
 
 class Block:
     def __init__(self, numberBlock, data, previousHash, idHash):
@@ -68,7 +68,7 @@ class Blockchain:
             if re.match(pattern, id_hash):
                 return id_hash
 
-    def insertBlock(self, tupla, nombreTabla):
+    def insertBlock(self, tupla, nombreDatabase, nombreTabla):
         id_hash = self.generate_hash(tupla)
         newBlock = Block(self.idChain, tupla, self.previous, id_hash)
         self.idChain += 1
@@ -81,40 +81,31 @@ class Blockchain:
                     self.blocks_list[i].setPreviousBlock(self.blocks_list[i-1])
                     print("Actual:", self.blocks_list[i].getIdBlock())
                     print("Anterior:", self.blocks_list[i].getPreviousBlock().getIdBlock())
-
-        file = open(f"{nombreTabla}.json", "w+")
+        nameJson = str(nombreDatabase) + '-' + str(nombreTabla)
+        file = self.load_json(nameJson)
         file.write(json.dumps([j.getBlock() for j in self.blocks_list]))
+        file.close()
         self.previous = id_hash
 
-
-    def updateBlock(self, oldName, newName, table):
-
+    def updateBlock(self, oldTuple, newTuple, nameDatabase, nameTable):
         # Cambiando valores de la lista y generando nuevo hash
-        newHash = ""
-        for tuple in table:
-            if tuple.nombre == oldName:
-                tuple.nombre = newName
-                newHash = self.generate_hash(tuple)
 
-        file = open("tabla1.json", "r")
+        newHash = self.generate_hash(newTuple)
+        nameJson = str(nameDatabase) + '_' + str(nameTable)
+        file = open(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json", "r")
         JSblock_list = json.loads(file.read())
         file.close()
 
-        # Imprimiendo tuplas de personas
-        for persona in table:
-            print("\n", persona.nombre)
-            print(persona.tupla)
-
         # Recorriendo JSON
         for blockJS in JSblock_list:
-            if oldName == blockJS[1][0]:
-                blockJS[1][0] = newName
+            if oldTuple == blockJS[1][0]:
+                blockJS[1][0] = newTuple
                 blockJS[3] = newHash
 
         # actualizando JSON
         for block in self.blocks_list:
-            if oldName == block.getData()[0]:
-                block.getData()[0] = newName
+            if oldTuple == block.getData()[0]:
+                block.getData()[0] = newTuple
                 block.setIdHash(newHash)
 
         file = open("tabla1.json", "w+")
@@ -157,3 +148,12 @@ class Blockchain:
                 graph += nodo + '->' + nodoAnterior + "\n"
 
         return graph
+
+    # ------------------------------------------------------- FILES ----------------------------------------------------
+    def load_json(self, nombre):
+        if os.path.isdir(os.getcwd() + "\\DataJsonBC"):
+            file = open(os.getcwd() + "\\DataJsonBC\\" + nombre + ".json", "+w")
+            return file
+        os.makedirs(os.getcwd() + "\\DataJsonBC")
+        file = open(os.getcwd() + "\\DataJsonBC\\" + nombre + ".json", "+w")
+        return file
