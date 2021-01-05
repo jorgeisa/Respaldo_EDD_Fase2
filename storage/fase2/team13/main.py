@@ -255,4 +255,27 @@ def test3():
     dictionary = load('metadata')
     showDict(dictionary)
 
-test3()
+
+def testCompress():
+
+    print(createDatabase('db1', 'b', 'utf8'))
+    print(createTable('db1', 'Table1_DB1', 3))
+    print(insert('db1', 'Table1_DB1', ['Ya valines todos', 'F con el proyecto xdxd', 123]))
+    print(insert('db1', 'Table1_DB1', ['ABC', 'DEF', 'GHI']))
+
+    print('#' * 10 + ' Before')
+    print(extractTable('db1', 'Table1_DB1'))
+
+    print(alterTableCompress('db1', 'Table1_DB1', 2))
+    # table = extractTable('db1', 'Table1_DB1')
+    # print('Prueba')
+    # for tuple in table[0]:
+    #     print("Tamaño Real %d" % len(tuple))
+    print('#' * 10 + ' After')
+    print(extractTable('db1', 'Table1_DB1'))
+
+    print(alterTableDecompress('db1', 'Table1_DB1'))
+    print('#' * 10 + ' Decompress')
+    print(extractTable('db1', 'Table1_DB1'))
+
+testCompress()

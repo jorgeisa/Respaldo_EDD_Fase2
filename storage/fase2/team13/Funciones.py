@@ -1,6 +1,7 @@
 import os
 import pickle
 import shutil
+import zlib
 
 databases = {}  # LIST WITH DIFFERENT MODES
 dict_encoding = {'ascii': 1, 'iso-8859-1': 2, 'utf8': 3}
@@ -110,7 +111,95 @@ def alterTableDropFK(database, table, indexName):
     except:
         return 1
 
+
+# Compress Data
+def alterTableCompress(database, table, level):
+    try:
+        newTable = []
+
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+        mode = dictionary.get(database)[0]
+
+        if value_db:
+            j = checkMode(mode)
+            tableEx = j.extractTable(database, table)
+            for tuple in tableEx:
+                newTuple = []
+                for register in tuple:
+                    if isinstance(register, str):
+                        # print("Tamaño sin comprimir %d" % len(register))
+                        compressed = zlib.compress(register.encode(), level)
+                        # print("Tamaño comprimido %d" % len(compressed))
+                        newTuple.append(compressed)
+                    else:
+                        newTuple.append(register)
+
+                newTable.append(newTuple)
+
+            j.truncate(database, table)
+
+            for tuple in newTable:
+                j.insert(database, table, tuple)
+
+            save(dictionary, 'metadata')
+            return 0
+            #print(newTable)
+
+        else:
+            return 2
+    except:
+        return 1
+
+def alterTableDecompress(database, table):
+    try:
+        newTable = []
+
+        os.path.isfile(os.getcwd() + "\\Data\\metadata.bin")
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+        mode = dictionary.get(database)[0]
+
+        if value_db:
+            j = checkMode(mode)
+            tableEx = j.extractTable(database, table)
+            for tuple in tableEx:
+                newTuple = []
+                for register in tuple:
+                    if iscompressed(register):
+                        # print("Tamaño sin comprimir %d" % len(register))
+                        decompressed = zlib.decompress(register)
+                        # print("Tamaño comprimido %d" % len(compressed))
+                        newTuple.append(decompressed.decode("utf-8"))
+                    else:
+                        newTuple.append(register)
+
+                newTable.append(newTuple)
+
+            j.truncate(database, table)
+
+            for tuple in newTable:
+                j.insert(database, table, tuple)
+
+            save(dictionary, 'metadata')
+            return 0
+            # print(newTable)
+
+        else:
+            return 2
+    except:
+        return 1
+
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
+#if is compressed
+def iscompressed(data):
+    result = True
+    try:
+        s = zlib.decompress(data)
+    except:
+        result = False
+    return result
+
 # SHOW DICTIONARY FK
 def showFK(dictionary):
     print('--FOREIGN KEYS--')
