@@ -1,7 +1,7 @@
 import os
 import pickle
 import shutil
-# from .Blockchain import Blockchain as BChain
+from Blockchain import *
 
 databases = {}  # LIST WITH DIFFERENT MODES
 dict_encoding = {'ascii': 1, 'iso-8859-1': 2, 'utf8': 3}
@@ -90,9 +90,6 @@ def securityMode(database, table):
         return 1
 
 
-
-
-
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
 # SHOW DICTIONARY
 def showDict(dictionary):
@@ -143,7 +140,6 @@ def insertAgain(database, mode, newMode):
     new_mode = checkMode(newMode)
     new_mode.createDatabase(database)
     tables = old_mode.showTables(database)
-
     dictionary = load('metadata')
     dict_tables = dictionary.get(database)[2]
 
@@ -159,6 +155,10 @@ def insertAgain(database, mode, newMode):
 
         old_mode.dropDatabase(database)
 
+
+# Blockchain mode when the security mode is on
+def block_chainDo():
+    print()
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
