@@ -182,6 +182,23 @@ def insertAgain(database, mode, newMode):
 
         old_mode.dropDatabase(database)
 
+        
+def grapList(list_):
+    string = 'digraph G{\n'
+    string += 'node[shape = \"record\"]\n'
+
+    for i in range(0, len(list_)):
+        string += f'node{hash(list_[i])*hash(list_[i])} [ label = "{list_[i]}"]\n'
+        if i == len(list_)-1:
+            pass
+        else:
+            string += f'node{hash(list_[i])*hash(list_[i])} -> node{hash(list_[i+1])*hash(list_[i+1])}\n'
+
+    string += '}'
+    file = open("List.circo", "w")
+    file.write(string)
+    file.close()
+    os.system("circo -Tpng List.circo -o List.png")        
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
