@@ -272,9 +272,11 @@ def insertAgain(database, mode, newMode):
         old_mode.dropDatabase(database)
 
         
-def grapList(list_):
+def listGraph(list_):
     string = 'digraph G{\n'
-    string += 'node[shape = \"record\"]\n'
+    string += 'fontsize = \"30\"\n'
+    string += 'edge[ arrowhead = \"open\"\n ]'
+    string += "node[shape = \"ellipse\", fillcolor = \"turquoise\", style = \"filled\", fontcolor = \"black\" ]\n"
 
     for i in range(0, len(list_)):
         string += f'node{hash(list_[i])*hash(list_[i])} [ label = "{list_[i]}"]\n'
@@ -288,6 +290,40 @@ def grapList(list_):
     file.write(string)
     file.close()
     os.system("circo -Tpng List.circo -o List.png")        
+
+
+def concatenateStrings(list_):
+    string = ''
+    for i in range(0, len(list_)):
+        if i == len(list_) - 1:
+            string += str(list_[i])
+        else:
+            string += str(list_[i])+', '
+    return string
+
+
+def tupleGraph(list_):
+    string = 'digraph G{\n'
+    string += 'fontsize = \"30\"\n'
+    string += 'edge[ arrowhead = \"open\"\n ]'
+    string += "node[shape = \"ellipse\", fillcolor = \"turquoise\", style = \"filled\", fontcolor = \"black\" ]\n"
+
+    for i in range(0, len(list_)):
+        tuple_i = concatenateStrings(list_[i])
+
+        string += f'node{hash(tuple_i) * hash(tuple_i)} [ label = "{tuple_i}"]\n'
+        if i == len(list_)-1:
+            pass
+        else:
+            tuple_iplus = concatenateStrings(list_[i + 1])
+            string += f'node{hash(tuple_i)*hash(tuple_i)} -> node{hash(tuple_iplus)*hash(tuple_iplus)}\n'
+
+    string += '}'
+    file = open("List.circo", "w")
+    file.write(string)
+    file.close()
+    os.system("circo -Tpng List.circo -o List.png")
+       
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
