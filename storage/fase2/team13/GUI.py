@@ -389,6 +389,11 @@ def windowReportsGraph():
     Label(app, text='graphDF : base de datos y tabla                                                    ',
           bg="#FFFFFF", font=("Georgia", 10)).place(x=70, y=140)
 
+    img = PhotoImage(file='./images/grafos2.png')
+    label = Label(app, image=img, bg="#F0FFFF")
+    label.image = img
+    label.place(x=130, y=370)
+
     font = ("Georgia", 12)
     Label(app, text='Base de datos:', bg="#F0FFFF", font=font).place(x=70, y=200)
     nameDb = Entry(app, font=font)
@@ -399,21 +404,26 @@ def windowReportsGraph():
     nameTable.place(x=215, y=230, width=200)
 
     def showGraph(database, table):
-        if database != '' and table == '':  # graphDSD
-            print('graphDSD')
-            dictionary = load('metadata')
-            db = dictionary.get(database)
-            if db is None:
-                messagebox.showinfo('', 'DB no existe')
-                return
+        try:
+            if database != '' and table == '':  # graphDSD
+                print('graphDSD')
+                dictionary = load('metadata')
+                db = dictionary.get(database)
+                if db is None:
+                    messagebox.showinfo('', 'DB no existe')
+                    return
 
-            graphDSD(database)
-            ventana_imagen('./DSD.png')
+                graphDSD(database)
+                ventana_imagen('./DSD.png')
 
-        elif database != '' and table != '':  # graphDF
-            print('graphDF')
-        else:
-            print('Debe rellenar los campos')
+            elif database != '' and table != '':  # graphDF
+                print('graphDF')
+            else:
+                messagebox.showinfo('', 'Debe rellenar los campos')
+                windowReportsGraph()
+        except:
+            messagebox.showinfo('', 'Error en el método')
+            windowReportsGraph()
 
     confirm = Button(app, text="Confirmar", font=font, bg='#98FB98', command=lambda: showGraph(nameDb.get(), nameTable.get()))
     confirm.place(x=215, y=290)
@@ -427,6 +437,11 @@ def windowBlockchain():
     app.configure(bg="#F0FFFF")
     Label(app, text='BLOCKCHAIN', bg="#F0FFFF", font=("Georgia", 22)).place(x=180, y=50)
 
+    img = PhotoImage(file='./images/blockchain2.png')
+    label = Label(app, image=img, bg="#F0FFFF")
+    label.image = img
+    label.place(x=130, y=370)
+
     font = ("Georgia", 12)
     Label(app, text='Base de datos:', bg="#F0FFFF", font=font).place(x=70, y=200)
     nameDb = Entry(app, font=font)
@@ -437,9 +452,13 @@ def windowBlockchain():
     nameTable.place(x=215, y=230, width=200)
 
     def showImage(database, table):
-        path = f'./ImageBlockChain/{database}-{table}.png'
-        abrir_img = Image.open('../team13/' + path + '')
-        abrir_img.show()
+        try:
+            path = f'./ImageBlockChain/{database}-{table}.png'
+            abrir_img = Image.open('../team13/' + path + '')
+            abrir_img.show()
+        except:
+            messagebox.showinfo('', 'Database / Table incorrectos')
+            windowBlockchain()
 
     confirm = Button(app, text="Confirmar", font=font, bg='#98FB98', command=lambda: showImage(nameDb.get(), nameTable.get()))
     confirm.place(x=215, y=290)
