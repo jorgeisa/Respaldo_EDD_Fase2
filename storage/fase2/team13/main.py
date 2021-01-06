@@ -172,7 +172,9 @@ def test3():
     print(insert('db1', 'Table2_DB1', ['A2', 'B2', 'C2']), end='-')
     print(insert('db1', 'Table3_DB1', ['A3', 'B3', 'C3']), end='-')
 
-    print(insert('db2', 'Table1_DB2', ['A1', 'B1', 'C1']), end='-')
+    print(insert('db2', 'Table1_DB2', ['A', 'B', 'C']), end='-')
+    print(insert('db2', 'Table1_DB2', ['AA', 'BB', 'CC']), end='-')
+    print(insert('db2', 'Table1_DB2', ['AAA', 'BBB', 'CCC']), end='-')
     print(insert('db2', 'Table2_DB2', ['A2', 'B2', 'C2']), end='-')
     print(insert('db2', 'Table3_DB2', ['A3', 'B3', 'C3']), end='-')
 
@@ -205,6 +207,9 @@ def test3():
     print(safeModeOff('db1', 'Table1_DB1'))  #  Borrar archivos o imagenes que tenga
     print(safeModeOn('db1', 'Table1_DB1'))  # Armar ya el blockchain con tuplas
     print(insert('db1', 'Table1_DB1', ['41', 'B42', 'C43']))
+
+    print(safeModeOn('db1', 'Table1_DB1'))
+    print(safeModeOn('db2', 'Table1_DB2'))
     dictionary = load('metadata')
     showDict(dictionary)
 
