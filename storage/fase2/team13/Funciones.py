@@ -2,13 +2,15 @@ import os
 import pickle
 import shutil
 import zlib
+from Blockchain import *
 # COMMITS
-# NO SE SUBE: main, carpetas de data, images, storage (por el momento)
+''' NO SE SUBE: main, carpetas de data, images, storage (por el momento) '''
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
-# CLASE GUI -> COMMIT DE KEVIN
+''' CLASE GUI -> COMMIT DE KEVIN '''
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
 # ----------------------------------------------------- JORGE ----------------------------------------------------------
 # ----------------------------------------------------- ISAAC ----------------------------------------------------------
+'''CLASE BLOCKCHAIN -> COMMIT ISAAC'''
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
 databases = {}  # LIST WITH DIFFERENT MODES
@@ -73,6 +75,7 @@ def alterDatabaseMode(database, mode):
         return 0
     except:
         return 1
+
 
 # ----------------------------------------------------- JORGE ----------------------------------------------------------
 # ALTER FOREIGN KEY
@@ -214,6 +217,7 @@ def alterTableDecompress(database, table):
     except:
         return 1
 
+
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
 def alterDatabaseCompress(database, level):
     try:
@@ -306,6 +310,80 @@ def alterDatabaseDecompress(database):
     except:
         return 1
 
+
+# Blockchain
+def safeModeOn(database, table):
+    try:
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+
+        # If db doesn't exist
+        if not value_db:
+            return 2
+
+        # If tables doesn't exit
+        dict_tables = dictionary.get(database)[2]
+        if not dict_tables:
+            return 3
+
+        # If table info doesn't exist
+        tabla_info = dict_tables.get(table)
+        if not tabla_info:
+            return 3
+
+        # If modeSecurity is Off
+        if tabla_info[1] is False:
+            tabla_info[1] = True
+            # If object Blockchain is None
+            if tabla_info[2] is None:
+                mode = dictionary.get(database)[0]
+                j = checkMode(mode)
+                list_tuple = j.extractTable(database, table)
+                nameJson = str(database) + '-' + str(table)
+                BChain = make_block_chain(list_tuple, nameJson)
+                tabla_info[2] = BChain
+                save(dictionary, 'metadata')
+                return 0
+        # If modeSecurity es ON
+        return 4
+    except:
+        return 1
+
+
+def safeModeOff(database, table):
+    try:
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+
+        # If db doesn't exist
+        if not value_db:
+            return 2
+
+        # If tables doesn't exit
+        dict_tables = dictionary.get(database)[2]
+        if not dict_tables:
+            return 3
+
+        # If table doesn't exist
+        tabla_info = dict_tables.get(table)
+        if not tabla_info:
+            return 3
+
+        # If modeSecurity is ON
+        if tabla_info[1] is True:
+            tabla_info[1] = False
+            # If object Blockchain is not None
+            if tabla_info[2] is not None:
+                nameJson = str(database) + '-' + str(table)
+                tabla_info[2].removeFilesBlock(nameJson)
+                tabla_info[2] = None
+                save(dictionary, 'metadata')
+                return 0
+        # If modeSecurity es OFF
+        return 4
+    except:
+        return 1
+
     
 # GRAPHDSD
 def graphDSD(database):
@@ -352,6 +430,7 @@ def graphDSD(database):
     
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
 
+
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
 #If tuple is compressed
 def tupleIsnotCompressed(array):
@@ -374,6 +453,7 @@ def iscompressed(data):
     except:
         result = False
     return result
+
 
 # ----------------------------------------------------- JORGE ----------------------------------------------------------
 # SHOW DICTIONARY FK
@@ -451,6 +531,22 @@ def insertAgain(database, mode, newMode):
                     new_mode.insert(database, name_table, list_register)
 
         old_mode.dropDatabase(database)
+
+
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
+# Blockchain mode when the security mode is on
+def make_block_chain(list_tuple, nameJson):
+    # list_tuple = [['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']]
+    BChain = Blockchain()
+    for tuple in list_tuple:
+        BChain.insertBlock(tuple, nameJson)
+        graphBChain(BChain, nameJson)
+    return BChain
+
+
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
+def graphBChain(blockchainObject, nombreImagen):
+    blockchainObject.graphBlockchain(nombreImagen)
 
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
@@ -536,6 +632,7 @@ def showDatabases(database):
     except:
         return []
 
+
 # ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def alterDatabase(databaseOld, databaseNew):
     try:
@@ -557,6 +654,7 @@ def alterDatabase(databaseOld, databaseNew):
         return value_return
     except:
         return 1
+
 
 # ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def dropDatabase(database):
@@ -591,7 +689,8 @@ def createTable(database, table, numberColumns):
 
         if value_return == 0:
             dict_tables = dictionary.get(database)[2]
-            dict_tables[table] = [numberColumns, False]
+            Bchain = None
+            dict_tables[table] = [numberColumns, False, Bchain]
             save(dictionary, 'metadata')
 
         return value_return
@@ -791,6 +890,20 @@ def insert(database, table, register):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.insert(database, table, register)
+
+        # ----------------------------------------------------- ISAAC --------------------------------------------------
+        # Method to Blockchain
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            tabla_info = dict_tables.get(table)
+
+            # if the security mode is on
+            if tabla_info[1] is True:
+                nameJson = str(database) + '-' + str(table)
+                # The object block chain
+                tabla_info[2].insertBlock(register, nameJson)
+                graphBChain(tabla_info[2], nameJson)
+                save(dictionary, 'metadata')
         return value_return
     except:
         return 1
@@ -822,11 +935,42 @@ def extractRow(database, table, columns):
 
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
 def update(database, table, register, columns):
-    dictionary = load('metadata')
+    # database: str name of database
+    # table: str name of table
+    # register: dictionary {column: newValue}
+    # columns: list [primaryKey] [primarykey1, primarykey2...]
     try:
+        dictionary = load('metadata')
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
+        # Save the old tuple for the BChain method
+        oldTuple = j.extractRow(database, table, columns)
         value_return = j.update(database, table, register, columns)
+
+        # ----------------------------------------------------- ISAAC --------------------------------------------------
+        # Method to Blockchain
+        if value_return == 0:
+            print(j.extractRow(database, table, columns))
+            dict_tables = dictionary.get(database)[2]
+            tabla_info = dict_tables.get(table)
+
+            # if the security mode is on
+            if tabla_info[1] is True:
+                newTuple = []
+
+                # Generate the new Tuple
+                for i in oldTuple:
+                    newTuple.append(i)
+
+                for key in register:
+                    newTuple[key] = register[key]
+
+                nameJson = str(database) + '-' + str(table)
+
+                tabla_info[2].updateBlock(oldTuple, newTuple, nameJson)
+                graphBChain(tabla_info[2], nameJson)
+                save(dictionary, 'metadata')
+
         return value_return
     except:
         return 1
