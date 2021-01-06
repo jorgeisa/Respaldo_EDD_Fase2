@@ -2,7 +2,15 @@ import os
 import pickle
 import shutil
 import zlib
+# COMMITS
+# NO SE SUBE: main, carpetas de data, images, storage (por el momento)
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
+# CLASE GUI -> COMMIT DE KEVIN
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 databases = {}  # LIST WITH DIFFERENT MODES
 dict_encoding = {'ascii': 1, 'iso-8859-1': 2, 'utf8': 3}
 dict_modes = {'avl': 1, 'b': 2, 'bplus': 3, 'dict': 4, 'isam': 5, 'json': 6, 'hash': 7}
@@ -10,6 +18,8 @@ dict_modes = {'avl': 1, 'b': 2, 'bplus': 3, 'dict': 4, 'isam': 5, 'json': 6, 'ha
 
 # ---------------------------------------------------- FASE 2  ---------------------------------------------------------
 # CREATE DATABASE
+
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def createDatabase(database, mode, encoding):
     if dict_modes.get(mode) is None:
         return 3  # mode incorrect
@@ -41,6 +51,7 @@ def createDatabase(database, mode, encoding):
         return 0
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # ALTER DATABASEMODE
 def alterDatabaseMode(database, mode):
     try:
@@ -63,6 +74,7 @@ def alterDatabaseMode(database, mode):
     except:
         return 1
 
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
 # ALTER FOREIGN KEY
 def alterTableAddFK(database, table, indexName, columns, tableRef, columnsRef):
     try:
@@ -88,6 +100,7 @@ def alterTableAddFK(database, table, indexName, columns, tableRef, columnsRef):
         return 1
 
 
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
 # DROP FOREIGN KEY
 def alterTableDropFK(database, table, indexName):
     try:
@@ -112,6 +125,7 @@ def alterTableDropFK(database, table, indexName):
         return 1
 
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 # Compress Data
 def alterTableCompress(database, table, level):
     try:
@@ -151,6 +165,8 @@ def alterTableCompress(database, table, level):
     except:
         return 1
 
+
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def alterTableDecompress(database, table):
     try:
         newTable = []
@@ -191,6 +207,8 @@ def alterTableDecompress(database, table):
         return 1
 
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
+
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 #if is compressed
 def iscompressed(data):
     result = True
@@ -200,12 +218,15 @@ def iscompressed(data):
         result = False
     return result
 
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
 # SHOW DICTIONARY FK
 def showFK(dictionary):
     print('--FOREIGN KEYS--')
     for key in dictionary:
         print(key, ':', dictionary[key])
 
+
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # SHOW DICTIONARY
 def showDict(dictionary):
     print('-- DATABASES --')
@@ -213,12 +234,14 @@ def showDict(dictionary):
         print(key, ":", dictionary[key])
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # SHOW MODE
 def showMode(mode):
     j = checkMode(mode)
     print(mode, j.showDatabases())
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # CHECK MODE
 def checkMode(mode):
     if mode == 'avl':
@@ -250,6 +273,7 @@ def checkMode(mode):
         return j
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def insertAgain(database, mode, newMode):
     old_mode = checkMode(mode)
     new_mode = checkMode(newMode)
@@ -271,7 +295,8 @@ def insertAgain(database, mode, newMode):
 
         old_mode.dropDatabase(database)
 
-        
+
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def listGraph(list_):
     string = 'digraph G{\n'
     string += 'fontsize = \"30\"\n'
@@ -292,6 +317,7 @@ def listGraph(list_):
     os.system("circo -Tpng List.circo -o List.png")        
 
 
+# ----------------------------------------------------- DILAN/KEVIN ----------------------------------------------------------
 def concatenateStrings(list_):
     string = ''
     for i in range(0, len(list_)):
@@ -302,6 +328,7 @@ def concatenateStrings(list_):
     return string
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def tupleGraph(list_):
     string = 'digraph G{\n'
     string += 'fontsize = \"30\"\n'
@@ -330,6 +357,7 @@ def tupleGraph(list_):
 
 # createDatabase was modified in this fase
 
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def showDatabases(database):
     try:
         dictionary = load('metadata')
@@ -340,7 +368,7 @@ def showDatabases(database):
     except:
         return []
 
-
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def alterDatabase(databaseOld, databaseNew):
     try:
         dictionary = load('metadata')
@@ -362,7 +390,7 @@ def alterDatabase(databaseOld, databaseNew):
     except:
         return 1
 
-
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def dropDatabase(database):
     try:
         nombreBase = str(database)
@@ -381,6 +409,7 @@ def dropDatabase(database):
 
 # -------------------------------------------------- Table CRUD --------------------------------------------------------
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def createTable(database, table, numberColumns):
     try:
         dictionary = load('metadata')
@@ -402,6 +431,7 @@ def createTable(database, table, numberColumns):
         return 1
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def showTables(database):
     try:
         dictionary = load('metadata')
@@ -417,6 +447,7 @@ def showTables(database):
         return 1
 
 
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
 def extractTable(database, table):
     try:
         database = str(database)
@@ -433,6 +464,7 @@ def extractTable(database, table):
         return None
 
 
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
 def extractRangeTable(database, table, columnNumber, lower, upper):
     try:
         database = str(database)
@@ -449,6 +481,7 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
         return None
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def alterAddPK(database, table, columns):
     try:
         dictionary = load('metadata')
@@ -464,6 +497,7 @@ def alterAddPK(database, table, columns):
         return 1
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def alterDropPK(database, table):
     try:
         dictionary = load('metadata')
@@ -480,6 +514,7 @@ def alterDropPK(database, table):
         return 2
 
 
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def alterTable(database, tableOld, tableNew):
     try:
         database = str(database)
@@ -504,6 +539,7 @@ def alterTable(database, tableOld, tableNew):
         return 1
 
 
+# ----------------------------------------------------- ISAAC ----------------------------------------------------------
 def alterAddColumn(database, table, default):
     try:
         database = str(database)
@@ -529,6 +565,7 @@ def alterAddColumn(database, table, default):
         return 1
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def alterDropColumn(database, table, columnNumber):
     try:
         dictionary = load('metadata')
@@ -552,6 +589,7 @@ def alterDropColumn(database, table, columnNumber):
         return 1
 
 
+# ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def dropTable(database, table) :
     try:
         dictionary = load('metadata')
@@ -574,6 +612,7 @@ def dropTable(database, table) :
 
 # -------------------------------------------------- Tuples CRUD -------------------------------------------------------
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def insert(database, table, register):    
     try:
         dictionary = load('metadata')
@@ -589,6 +628,7 @@ def insert(database, table, register):
         return 1
 
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def loadCSV(file, database, table):
     dictionary = load('metadata')
     try:
@@ -600,6 +640,7 @@ def loadCSV(file, database, table):
         return []
 
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def extractRow(database, table, columns):
     dictionary = load('metadata')
     try:
@@ -611,6 +652,7 @@ def extractRow(database, table, columns):
         return []
 
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def update(database, table, register, columns):
     dictionary = load('metadata')
     try:
@@ -622,6 +664,7 @@ def update(database, table, register, columns):
         return 1
 
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def delete(database, table, columns):
     dictionary = load('metadata')
     try:
@@ -633,6 +676,7 @@ def delete(database, table, columns):
         return 1
 
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
 def truncate(database, table):
     dictionary = load('metadata')
     try:
@@ -644,6 +688,9 @@ def truncate(database, table):
 
 
 # ------------------------------------------------------- FILES --------------------------------------------------------
+
+
+# ----------------------------------------------------- KEVIN/JORGE ----------------------------------------------------------
 def save(objeto, nombre):
     file = open(nombre + ".bin", "wb")
     file.write(pickle.dumps(objeto))
@@ -653,6 +700,8 @@ def save(objeto, nombre):
     shutil.move(os.getcwd() + "\\" + nombre + ".bin", os.getcwd() + "\\Data")
 
 
+
+# ----------------------------------------------------- KEVIN/JORGE ----------------------------------------------------------
 def load(nombre):
     file = open(os.getcwd() + "\\Data\\" + nombre + ".bin", "rb")
     objeto = file.read()
