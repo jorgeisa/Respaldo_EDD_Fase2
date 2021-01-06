@@ -347,6 +347,8 @@ def graphDSD(database):
     file.close()
     os.system("dot -Tpng DSD.dot -o DSD.png")    
     
+    return string
+    
     
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
 
