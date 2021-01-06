@@ -185,7 +185,7 @@ class Blockchain:
         return direccion
 
     def removeFilesBlock(self, nameJson):
-        if os.path.isdir(os.getcwd() + "ImageBlockChain"):
-            if os.path.isfile(os.getcwd() + "\\ImageBlockChain\\" + nameJson + ".json"):
-                os.remove(os.getcwd() + "\\ImageBlockChain\\" + nameJson + ".json")
-                os.remove(os.getcwd() + "\\ImageBlockChain\\" + nameJson + ".dot")
+        if os.path.isdir(os.getcwd() + "\\DataJsonBC"):
+            if os.path.isfile(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json"):
+                os.remove(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json")
+                # os.remove(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".dot")

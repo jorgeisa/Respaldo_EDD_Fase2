@@ -262,6 +262,7 @@ def test3():
     # print(extractRow('db3', 'Table1_DB3', ['C1']))
 
     print(update('db1', 'Table1_DB1', {0: 'JORGE8'}, ['B1']))
+    print(safeModeOff('db1', 'Table1_DB1'))
     # print(extractRow('db3', 'Table1_DB3', ['C1']))
     # print(extractTable('db3', 'Table1_DB3'))
 
