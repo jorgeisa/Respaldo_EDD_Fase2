@@ -65,7 +65,45 @@ def alterDatabaseMode(database, mode):
 
 
 # Blockchain
-def securityMode(database, table):
+def safeModeOn(database, table):
+    try:
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+
+        # If db doesn't exist
+        if not value_db:
+            return 2
+
+        # If tables doesn't exit
+        dict_tables = dictionary.get(database)[2]
+        if not dict_tables:
+            return 3
+
+        # If table info doesn't exist
+        tabla_info = dict_tables.get(table)
+        if not tabla_info:
+            return 3
+
+        # If modeSecurity is Off
+        if tabla_info[1] is False:
+            tabla_info[1] = True
+            # If object Blockchain is None
+            if tabla_info[2] is None:
+                mode = dictionary.get(database)[0]
+                j = checkMode(mode)
+                list_tuple = j.extractTable(database, table)
+                nameJson = str(database) + '_' + str(table)
+                BChain = make_block_chain(list_tuple, nameJson)
+                tabla_info[2] = BChain
+                save(dictionary, 'metadata')
+                return 0
+        # If modeSecurity es ON
+        return 4
+    except:
+        return 1
+
+
+def safeModeOff(database, table):
     try:
         dictionary = load('metadata')
         value_db = dictionary.get(database)
@@ -81,21 +119,19 @@ def securityMode(database, table):
 
         # If table doesn't exist
         tabla_info = dict_tables.get(table)
-        if not table:
-            return 4
+        if not tabla_info:
+            return 3
 
-        if tabla_info[1] is False:
-            tabla_info[1] = True
-            if tabla_info[2] is None:
-                mode = dictionary.get(database)[0]
-                j = checkMode(mode)
-                list_tuple = j.extractTable(database, table)
-                BChain = make_block_chain(list_tuple, database, table)
-                tabla_info[2] = BChain
-        else:
+        # If modeSecurity is ON
+        if tabla_info[1] is True:
             tabla_info[1] = False
-        save(dictionary, 'metadata')
-        return 0
+            # If object Blockchain is not None
+            if tabla_info[2] is not None:
+                tabla_info[2] = None
+                save(dictionary, 'metadata')
+                return 0
+        # If modeSecurity es OFF
+        return 4
     except:
         return 1
 
@@ -167,12 +203,17 @@ def insertAgain(database, mode, newMode):
 
 
 # Blockchain mode when the security mode is on
-def make_block_chain(list_tuple, nameDatabase, nameTable):
+def make_block_chain(list_tuple, nameJson):
     # list_tuple = [['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']]
     BChain = Blockchain()
     for tuple in list_tuple:
-        BChain.insertBlock(tuple, nameDatabase, nameTable)
+        BChain.insertBlock(tuple, nameJson)
+        graphBChain(BChain, nameJson)
     return BChain
+
+
+def graphBChain(blockchainObject, nombreImagen):
+    blockchainObject.graphBlockchain(nombreImagen)
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
@@ -462,11 +503,19 @@ def extractRow(database, table, columns):
 
 
 def update(database, table, register, columns):
+    # database: str name of database
+    # table: str name of table
+    # register: dictionary {column: newValue}
+    # columns: list [primaryKey] [primarykey1, primarykey2...]
     dictionary = load('metadata')
     try:
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.update(database, table, register, columns)
+
+        # Method to Blockchain
+        if value_return == 0:
+            list_tuples = j.extractTable(database, table)
         return value_return
     except:
         return 1

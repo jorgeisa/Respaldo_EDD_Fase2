@@ -11,7 +11,6 @@ class Block:
         self._data = data
         self._previousHash = previousHash
         self._idHash = idHash
-        self._previousBlock = None
         self._checker = True
 
     def getIdBlock(self):
@@ -42,12 +41,12 @@ class Block:
         return [self._idBlock, self._data, self._previousHash, self._idHash]
 
     def getInfoGraph(self):
-        info = "Bloque: " + str(self._idBlock) + "\\nData: " + str(self._data) + "\\nHash Bloque: " + str(self._idHash) \
+        info = "Bloque: " + str(self._idBlock) + "\\nData: " + str(self._data) + "\\nHash Bloque: " + str(self._idHash)\
                + "\\nHash Ant.: " + str(self._previousHash)
         return info
 
-    def verificarBloque(self):
-        if self._previousBlock.getIdHash() == self._previousHash:
+    def verificarBloque(self, hashAnterior):
+        if hashAnterior == self._previousHash:
             return True
         self._checker = False
         return False
@@ -68,28 +67,19 @@ class Blockchain:
             if re.match(pattern, id_hash):
                 return id_hash
 
-    def insertBlock(self, tupla, nombreDatabase, nombreTabla):
+    def insertBlock(self, tupla, nameJson):
         id_hash = self.generate_hash(tupla)
         newBlock = Block(self.idChain, tupla, self.previous, id_hash)
-        self.idChain += 1
         self.blocks_list.append(newBlock)
 
-        # Colocando todos los punteros al anterior bloque
-        if len(self.blocks_list) != 1:
-            for i in range(len(self.blocks_list)):
-                if i == (len(self.blocks_list)-1):
-                    self.blocks_list[i].setPreviousBlock(self.blocks_list[i-1])
-                    print("Actual:", self.blocks_list[i].getIdBlock())
-                    print("Anterior:", self.blocks_list[i].getPreviousBlock().getIdBlock())
-        nameJson = str(nombreDatabase) + '-' + str(nombreTabla)
         file = self.load_json(nameJson)
         file.write(json.dumps([j.getBlock() for j in self.blocks_list]))
         file.close()
+        self.idChain += 1
         self.previous = id_hash
 
     def updateBlock(self, oldTuple, newTuple, nameDatabase, nameTable):
         # Cambiando valores de la lista y generando nuevo hash
-
         newHash = self.generate_hash(newTuple)
         nameJson = str(nameDatabase) + '_' + str(nameTable)
         file = open(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json", "r")
@@ -112,16 +102,16 @@ class Blockchain:
         file.write(json.dumps(JSblock_list))
         file.close()
 
-    def graphBlockchain(self):
+    def graphBlockchain(self, nombreImagen):
         graph = 'digraph G{\n'
         graph += 'rankdir=LR;\n'
         graph += "node[shape = \"box\"]\n"
         graph += self.__graficar()
         graph += '}'
-        file = open("BChain.dot", "w")
+        file = open(f"{nombreImagen}.dot", "w")
         file.write(graph)
         file.close()
-        os.system('dot -Tpng BChain.dot -o BChain.png')
+        os.system(f'dot -Tpng {nombreImagen}.dot -o {nombreImagen}.png')
 
     def __graficar(self):
         graph = ""
@@ -129,25 +119,27 @@ class Blockchain:
             info = self.blocks_list[i].getInfoGraph()
             nodo = 'node' + str(self.blocks_list[i].getIdBlock())
             color = "green"
+            hashAnterior = self.blocks_list[i].getPreviousHash()
 
             if not (i == 0):
-                brokeChain = self.blocks_list[i].verificarBloque()
+                brokeChain = self.blocks_list[i].verificarBloque(str(hashAnterior))
                 if not brokeChain:
                     color = "red"
 
-            if not (i == (len(self.blocks_list)-1)):
-                nextId = self.blocks_list[i+1].getIdBlock()
+            if not (i == (len(self.blocks_list) - 1)):
+                nextId = self.blocks_list[i + 1].getIdBlock()
                 nextNodo = 'node' + str(nextId)
-                graph += nodo + f'[label="{info}", color="{color}", fixedsize="false", height="1", width="1"]\n'
+                graph += nodo + f'[label="{info}", color="{color}"]\n'
                 graph += nodo + '->' + nextNodo + '\n'
             else:
-                graph += nodo + f'[label="{info}", color="{color}", fixedsize="false", height="1", width="1"]\n'
+                graph += nodo + f'[label="{info}", color="{color}"]\n'
 
             if not (i == 0):
-                nodoAnterior = "node" + str(self.blocks_list[i].getPreviousBlock().getIdBlock())
+                nodoAnterior = "node" + str(self.blocks_list[i-1].getIdBlock())
                 graph += nodo + '->' + nodoAnterior + "\n"
 
         return graph
+
 
     # ------------------------------------------------------- FILES ----------------------------------------------------
     def load_json(self, nombre):
