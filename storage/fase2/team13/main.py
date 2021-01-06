@@ -259,23 +259,51 @@ def test3():
 def testCompress():
 
     print(createDatabase('db1', 'b', 'utf8'))
+    print(createDatabase('db2', 'avl', 'utf8'))
+
     print(createTable('db1', 'Table1_DB1', 3))
+    print(createTable('db1', 'Table2_DB1', 3))
+    print(createTable('db1', 'Table3_DB1', 3))
+    print(createTable('db2', 'Table1_DB2', 3))
+
     print(insert('db1', 'Table1_DB1', ['Ya valines todos', 'F con el proyecto xdxd', 123]))
     print(insert('db1', 'Table1_DB1', ['ABC', 'DEF', 'GHI']))
+    print(insert('db1', 'Table2_DB1', ['A ver si funciona esto xd', 'F en el chat', 'Si sale el lab']))
+    print(insert('db1', 'Table3_DB1', ['ya super F', 'Isaac es mal coordinador', 'Son bromas es un papucho']))
+    print(insert('db2', 'Table1_DB2', ['Test de compresion de las bases de datos xdxd', 'Ya no se que mas poner en estas tuplas jsjsjs', 'F en el chat']))
 
     print('#' * 10 + ' Before')
     print(extractTable('db1', 'Table1_DB1'))
+    print(extractTable('db1', 'Table2_DB1'))
+    print(extractTable('db1', 'Table3_DB1'))
+    print(extractTable('db2', 'Table1_DB2'))
 
-    print(alterTableCompress('db1', 'Table1_DB1', 2))
-    # table = extractTable('db1', 'Table1_DB1')
-    # print('Prueba')
-    # for tuple in table[0]:
-    #     print("Tamaño Real %d" % len(tuple))
+    print(alterDatabaseCompress('db2', 6))
+
     print('#' * 10 + ' After')
     print(extractTable('db1', 'Table1_DB1'))
+    print(extractTable('db1', 'Table2_DB1'))
+    print(extractTable('db1', 'Table3_DB1'))
+    print(extractTable('db2', 'Table1_DB2'))
 
-    print(alterTableDecompress('db1', 'Table1_DB1'))
-    print('#' * 10 + ' Decompress')
+    print(alterDatabaseDecompress('db2'))
+
+    print('#' * 10 + ' After')
     print(extractTable('db1', 'Table1_DB1'))
+    print(extractTable('db1', 'Table2_DB1'))
+    print(extractTable('db1', 'Table3_DB1'))
+    print(extractTable('db2', 'Table1_DB2'))
+
+    # print(alterTableCompress('db1', 'Table1_DB1', 6))
+    # # table = extractTable('db1', 'Table1_DB1')
+    # # print('Prueba')
+    # # for tuple in table[0]:
+    # #     print("Tamaño Real %d" % len(tuple))
+    # print('#' * 10 + ' After')
+    # print(extractTable('db1', 'Table1_DB1'))
+    #
+    # print(alterTableDecompress('db1', 'Table1_DB1'))
+    # print('#' * 10 + ' Decompress')
+    # print(extractTable('db1', 'Table1_DB1'))
 
 testCompress()

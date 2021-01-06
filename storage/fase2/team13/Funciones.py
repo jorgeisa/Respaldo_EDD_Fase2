@@ -129,6 +129,10 @@ def alterTableDropFK(database, table, indexName):
 # Compress Data
 def alterTableCompress(database, table, level):
     try:
+
+        if level > 9 or level < 0:
+            return 4
+
         newTable = []
 
         dictionary = load('metadata')
@@ -179,6 +183,10 @@ def alterTableDecompress(database, table):
         if value_db:
             j = checkMode(mode)
             tableEx = j.extractTable(database, table)
+
+            if tupleIsnotCompressed(tableEx):
+                return 3
+
             for tuple in tableEx:
                 newTuple = []
                 for register in tuple:
@@ -206,7 +214,112 @@ def alterTableDecompress(database, table):
     except:
         return 1
 
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
+def alterDatabaseCompress(database, level):
+    try:
+
+        if level > 9 or level < 0:
+            return 4
+
+
+
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+        mode = dictionary.get(database)[0]
+
+        if value_db:
+            j = checkMode(mode)
+            tables = j.showTables(database)
+            for table in tables:
+                newTable = []
+                tableEx = j.extractTable(database, table)
+
+                for tuple in tableEx:
+                    newTuple = []
+                    for register in tuple:
+                        if isinstance(register, str):
+                            # print("Tamaño sin comprimir %d" % len(register))
+                            compressed = zlib.compress(register.encode(), level)
+                            # print("Tamaño comprimido %d" % len(compressed))
+                            newTuple.append(compressed)
+                        else:
+                            newTuple.append(register)
+
+                    newTable.append(newTuple)
+
+                j.truncate(database, table)
+
+                for tuple in newTable:
+                    j.insert(database, table, tuple)
+
+                save(dictionary, 'metadata')
+            return 0
+                #print(newTable)
+
+        else:
+            return 2
+    except:
+        return 1
+
+
+def alterDatabaseDecompress(database):
+    try:
+
+        dictionary = load('metadata')
+        value_db = dictionary.get(database)
+        mode = dictionary.get(database)[0]
+
+        if value_db:
+            j = checkMode(mode)
+            tables = j.showTables(database)
+            for table in tables:
+                newTable = []
+                tableEx = j.extractTable(database, table)
+
+                if tupleIsnotCompressed(tableEx):
+                    return 3
+
+                for tuple in tableEx:
+                    newTuple = []
+                    for register in tuple:
+                        if iscompressed(register):
+                            # print("Tamaño sin comprimir %d" % len(register))
+                            decompressed = zlib.decompress(register)
+                            # print("Tamaño comprimido %d" % len(compressed))
+                            newTuple.append(decompressed.decode("utf-8"))
+                        else:
+                            newTuple.append(register)
+
+                    newTable.append(newTuple)
+
+                j.truncate(database, table)
+
+                for tuple in newTable:
+                    j.insert(database, table, tuple)
+
+                save(dictionary, 'metadata')
+            return 0
+                #print(newTable)
+
+        else:
+            return 2
+    except:
+        return 1
+
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
+
+# ----------------------------------------------------- DILAN ----------------------------------------------------------
+#If tuple is compressed
+def tupleIsnotCompressed(array):
+    flag = True
+
+    for tuple in array:
+        for register in tuple:
+            if iscompressed(register):
+                return False
+
+    return flag
+
 
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
 #if is compressed
