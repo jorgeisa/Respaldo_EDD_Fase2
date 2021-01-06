@@ -717,6 +717,8 @@ def showTables(database):
 # ----------------------------------------------------- JORGE ----------------------------------------------------------
 def extractTable(database, table):
     try:
+        newTable = []
+
         database = str(database)
         table = str(table)
         dictionary = load('metadata')
@@ -726,6 +728,21 @@ def extractTable(database, table):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.extractTable(database, table)
+
+        #compress
+        for tuple in value_return:
+            newTuple = []
+            for register in tuple:
+                if iscompressed(register):
+                    decompressed = zlib.decompress(register)
+                    newTuple.append(decompressed.decode("utf-8"))
+                else:
+                    newTuple.append(register)
+
+            newTable.append(newTuple)
+
+        value_return = newTable
+
         return value_return
     except:
         return None
@@ -734,6 +751,8 @@ def extractTable(database, table):
 # ----------------------------------------------------- JORGE ----------------------------------------------------------
 def extractRangeTable(database, table, columnNumber, lower, upper):
     try:
+        newTable = []
+
         database = str(database)
         table = str(table)
         dictionary = load('metadata')
@@ -743,6 +762,21 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
+
+        # compress
+        for tuple in value_return:
+            newTuple = []
+            for register in tuple:
+                if iscompressed(register):
+                    decompressed = zlib.decompress(register)
+                    newTuple.append(decompressed.decode("utf-8"))
+                else:
+                    newTuple.append(register)
+
+            newTable.append(newTuple)
+
+        value_return = newTable
+
         return value_return
     except:
         return None
