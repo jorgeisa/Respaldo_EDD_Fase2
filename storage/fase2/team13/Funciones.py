@@ -92,7 +92,7 @@ def safeModeOn(database, table):
                 mode = dictionary.get(database)[0]
                 j = checkMode(mode)
                 list_tuple = j.extractTable(database, table)
-                nameJson = str(database) + '_' + str(table)
+                nameJson = str(database) + '-' + str(table)
                 BChain = make_block_chain(list_tuple, nameJson)
                 tabla_info[2] = BChain
                 save(dictionary, 'metadata')
@@ -475,6 +475,19 @@ def insert(database, table, register):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.insert(database, table, register)
+
+        if value_return == 0:
+            dict_tables = dictionary.get(database)[2]
+            tabla_info = dict_tables.get(table)
+
+            # if the security mode is on
+            if tabla_info[1] is True:
+                nameJson = str(database) + '-' + str(table)
+                # The object block chain
+                tabla_info[2].insertBlock(register, nameJson)
+                graphBChain(tabla_info[2], nameJson)
+
+
         return value_return
     except:
         return 1

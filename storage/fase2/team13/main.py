@@ -222,10 +222,10 @@ def test3():
     print(showTables('db6'))
 
     print()
-    print('#' * 20 + ' Security Mode ' + '#' * 20)
+    print('#' * 20 + ' Security Mode JIJIJIJ' + '#' * 20)
     print(safeModeOff('db1', 'Table1_DB1'))
     print(safeModeOn('db1', 'Table1_DB1'))
-
+    print(insert('db1', 'Table1_DB1', ['41', 'B42', 'C43']))
     dictionary = load('metadata')
     showDict(dictionary)
 
