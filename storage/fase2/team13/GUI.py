@@ -191,6 +191,14 @@ def ventana_principal():
     db = Button(text="Cargar", bg="#FFFFFF", image=img_subir, compound="top", font=("Georgia", 16), command=ventana_loadCSV)
     db.place(x=700, y=200)
 
+    imgGraph = PhotoImage(file="./images/grafos.png")
+    buttonGrap = Button(text="Grafos", bg="#FFFFFF", image=imgGraph, compound="top", font=("Georgia", 16), command=lambda: windowReportsGraph())
+    buttonGrap.place(x=500, y=400)
+
+    imgBlockchain = PhotoImage(file="./images/blockchain.png")
+    buttonBlockchain = Button(text="Blockchain", bg="#FFFFFF", image=imgBlockchain, compound="top", font=("Georgia", 16) ,command=lambda: windowBlockchain())
+    buttonBlockchain.place(x=700, y=400)
+
     # Combobox
     combo = ttk.Combobox(app)
     combo.place(x=90, y=230)
@@ -367,4 +375,75 @@ def ventana_loadCSV():
     bt.place(x=215, y=300)
 
 
+# ---------------------------------------------------------- GRAPH -----------------------------------------------------
+def windowReportsGraph():
+    app = Toplevel()
+    configuracion_defecto(app)
+    centrar_ventana(app, 500, 700)
+    app.configure(bg="#F0FFFF")
+    Label(app, text='GRAFOS', bg="#F0FFFF", font=("Georgia", 22)).place(x=180, y=50)
+    Label(app, text='Campos requeridos:                                                                          ',
+          bg="#FFFFFF", font=("Georgia", 10)).place(x=70, y=100)
+    Label(app, text='graphDSD : base de datos                                                                ',
+          bg="#FFFFFF", font=("Georgia", 10)).place(x=70, y=120)
+    Label(app, text='graphDF : base de datos y tabla                                                    ',
+          bg="#FFFFFF", font=("Georgia", 10)).place(x=70, y=140)
+
+    font = ("Georgia", 12)
+    Label(app, text='Base de datos:', bg="#F0FFFF", font=font).place(x=70, y=200)
+    nameDb = Entry(app, font=font)
+    nameDb.place(x=215, y=200, width=200)
+
+    Label(app, text='Tabla:', bg="#F0FFFF", font=font).place(x=70, y=230)
+    nameTable = Entry(app, font=font)
+    nameTable.place(x=215, y=230, width=200)
+
+    def showGraph(database, table):
+        if database != '' and table == '':  # graphDSD
+            print('graphDSD')
+            dictionary = load('metadata')
+            db = dictionary.get(database)
+            if db is None:
+                messagebox.showinfo('', 'DB no existe')
+                return
+
+            graphDSD(database)
+            ventana_imagen('./DSD.png')
+
+        elif database != '' and table != '':  # graphDF
+            print('graphDF')
+        else:
+            print('Debe rellenar los campos')
+
+    confirm = Button(app, text="Confirmar", font=font, bg='#98FB98', command=lambda: showGraph(nameDb.get(), nameTable.get()))
+    confirm.place(x=215, y=290)
+
+
+# ---------------------------------------------------------- BLOCKCHAIN ------------------------------------------------
+def windowBlockchain():
+    app = Toplevel()
+    configuracion_defecto(app)
+    centrar_ventana(app, 500, 700)
+    app.configure(bg="#F0FFFF")
+    Label(app, text='BLOCKCHAIN', bg="#F0FFFF", font=("Georgia", 22)).place(x=180, y=50)
+
+    font = ("Georgia", 12)
+    Label(app, text='Base de datos:', bg="#F0FFFF", font=font).place(x=70, y=200)
+    nameDb = Entry(app, font=font)
+    nameDb.place(x=215, y=200, width=200)
+
+    Label(app, text='Tabla:', bg="#F0FFFF", font=font).place(x=70, y=230)
+    nameTable = Entry(app, font=font)
+    nameTable.place(x=215, y=230, width=200)
+
+    def showImage(database, table):
+        path = f'./ImageBlockChain/{database}-{table}.png'
+        abrir_img = Image.open('../team13/' + path + '')
+        abrir_img.show()
+
+    confirm = Button(app, text="Confirmar", font=font, bg='#98FB98', command=lambda: showImage(nameDb.get(), nameTable.get()))
+    confirm.place(x=215, y=290)
+
+
 ventana_principal()
+
