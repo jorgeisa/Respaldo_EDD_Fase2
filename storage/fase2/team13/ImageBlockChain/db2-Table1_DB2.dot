@@ -1,0 +1,20 @@
+digraph G{
+rankdir=LR;
+node[shape = "box"]
+node1[label="Bloque: 1\nData: ['A', 'B', 'C']\nHash Bloque: b4c9ff43bbf8a3b84a346356fba2b50ff938cde4658d5ff10e682b257d93722d\nHash Ant.: 0", color="green", penwidth=3]
+node1->node2
+node2[label="Bloque: 2\nData: ['A', 'B', 'C']\nHash Bloque: b4c9ff43bbf8a3b84a346356fba2b50ff938cde4658d5ff10e682b257d93722d\nHash Ant.: b4c9ff43bbf8a3b84a346356fba2b50ff938cde4658d5ff10e682b257d93722d", color="green", penwidth=3]
+node2->node3
+node2->node1
+node1[color=green]node3[label="Bloque: 3\nData: ['AA', 'BB', 'CC']\nHash Bloque: 4b41dfa02782df8de7e8ed3855b951ab484755a85e76083392deeca7a5d26f69\nHash Ant.: b4c9ff43bbf8a3b84a346356fba2b50ff938cde4658d5ff10e682b257d93722d", color="green", penwidth=3]
+node3->node4
+node3->node2
+node2[color=green]node4[label="Bloque: 4\nData: ['AAA', 'BBB', 'CCC']\nHash Bloque: 4075a641567f74387acbb66492edf759dac6065810a6aa5bba3087d5ceadc27f\nHash Ant.: 4b41dfa02782df8de7e8ed3855b951ab484755a85e76083392deeca7a5d26f69", color="green", penwidth=3]
+node4->node5
+node4->node3
+node3[color=green]node5[label="Bloque: 5\nData: ['AA', 'BB', 'CC']\nHash Bloque: 4b41dfa02782df8de7e8ed3855b951ab484755a85e76083392deeca7a5d26f69\nHash Ant.: 4075a641567f74387acbb66492edf759dac6065810a6aa5bba3087d5ceadc27f", color="green", penwidth=3]
+node5->node6
+node5->node4
+node4[color=green]node6[label="Bloque: 6\nData: ['AAA', 'BBB', 'CCC']\nHash Bloque: 4075a641567f74387acbb66492edf759dac6065810a6aa5bba3087d5ceadc27f\nHash Ant.: 4b41dfa02782df8de7e8ed3855b951ab484755a85e76083392deeca7a5d26f69", color="green", penwidth=3]
+node6->node5
+node5[color=green]}
