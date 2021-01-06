@@ -25,14 +25,8 @@ class Block:
     def getIdHash(self):
         return self._idHash
 
-    def getPreviousBlock(self):
-        return self._previousBlock
-
     def getChecker(self):
         return self._checker
-
-    def setPreviousBlock(self, previousBlock):
-        self._previousBlock = previousBlock
 
     def setIdHash(self, idHash):
         self._idHash = idHash
@@ -57,6 +51,7 @@ class Blockchain:
         self.idChain = 1
         self.previous = 0
         self.blocks_list = []
+        self.firstHash = ""
         self.checkerChain = True
 
     def generate_hash(self, data):
@@ -75,6 +70,11 @@ class Blockchain:
         file = self.load_json(nameJson)
         file.write(json.dumps([j.getBlock() for j in self.blocks_list]))
         file.close()
+
+        # only for the first
+        if self.idChain == 1:
+            self.firstHash = id_hash
+
         self.idChain += 1
         self.previous = id_hash
 
