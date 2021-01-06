@@ -528,7 +528,13 @@ def update(database, table, register, columns):
 
         # Method to Blockchain
         if value_return == 0:
-            list_tuples = j.extractTable(database, table)
+            dict_tables = dictionary.get(database)[2]
+            tabla_info = dict_tables.get(table)
+
+            # if the security mode is on
+            if tabla_info[1] is True:
+                nameJson = str(database) + '-' + str(table)
+                tabla_info[2].updateBlock()
         return value_return
     except:
         return 1

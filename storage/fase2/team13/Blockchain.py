@@ -136,10 +136,9 @@ class Blockchain:
 
         return graph
 
-    def updateBlock(self, oldTuple, newTuple, nameDatabase, nameTable):
+    def updateBlock(self, oldTuple, newTuple, nameJson):
         # Cambiando valores de la lista y generando nuevo hash
         newHash = self.generate_hash(newTuple)
-        nameJson = str(nameDatabase) + '_' + str(nameTable)
         file = open(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json", "r")
         JSblock_list = json.loads(file.read())
         file.close()

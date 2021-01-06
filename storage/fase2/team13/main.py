@@ -212,6 +212,9 @@ def test3():
     print(insert('db6', 'Table2_DB6', ['A2', 'B2', 'C2']), end='-')
     print(insert('db6', 'Table3_DB6', ['A3', 'B3', 'C3']))
 
+    print()
+    print('#' * 20 + ' EXTRACTROW ' + '#' * 20)
+    print(extractRow('db1', 'Table1_DB1', [2]))
 
     print('#' * 20 + ' Show Tables')
     print(showTables('db1'))
@@ -260,6 +263,10 @@ def test3():
     print('#' * 20 + ' UPDATE' + '#' * 20)
     print(update('db3', 'Table1_DB3', {1: 'JORGE8'}, ['C1']))
     print(extractTable('db3', 'Table1_DB3'))
+
+    print('#' * 20 + ' UPDATE' + '#' * 20)
+    print(update('db1', 'Table1_DB1', {1: 'JORGE8'}, ['B1']))
+    print(extractTable('db1', 'Table1_DB1'))
 
     print('#' * 20 + ' Alter Drop PK')
     print(alterDropPK('db1', 'Table1_DB1'))
