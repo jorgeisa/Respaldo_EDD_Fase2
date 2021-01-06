@@ -127,6 +127,8 @@ def safeModeOff(database, table):
             tabla_info[1] = False
             # If object Blockchain is not None
             if tabla_info[2] is not None:
+                nameJson = str(database) + '-' + str(table)
+                tabla_info[2].removeFilesBlock(nameJson)
                 tabla_info[2] = None
                 save(dictionary, 'metadata')
                 return 0
@@ -520,21 +522,36 @@ def update(database, table, register, columns):
     # table: str name of table
     # register: dictionary {column: newValue}
     # columns: list [primaryKey] [primarykey1, primarykey2...]
-    dictionary = load('metadata')
     try:
+        dictionary = load('metadata')
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
+        # Save the old tuple for the BChain method
+        oldTuple = j.extractRow(database, table, columns)
         value_return = j.update(database, table, register, columns)
 
         # Method to Blockchain
         if value_return == 0:
+            print(j.extractRow(database, table, columns))
             dict_tables = dictionary.get(database)[2]
             tabla_info = dict_tables.get(table)
 
             # if the security mode is on
             if tabla_info[1] is True:
+                newTuple = []
+
+                # Generate the new Tuple
+                for i in oldTuple:
+                    newTuple.append(i)
+
+                for key in register:
+                    newTuple[key] = register[key]
+
                 nameJson = str(database) + '-' + str(table)
-                tabla_info[2].updateBlock()
+
+                tabla_info[2].updateBlock(oldTuple, newTuple, nameJson)
+                graphBChain(tabla_info[2], nameJson)
+
         return value_return
     except:
         return 1

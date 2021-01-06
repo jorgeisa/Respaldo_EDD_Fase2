@@ -28,6 +28,9 @@ class Block:
     def getChecker(self):
         return self._checker
 
+    def setData(self, data):
+        self._data = data
+
     def setIdHash(self, idHash):
         self._idHash = idHash
 
@@ -42,10 +45,10 @@ class Block:
                + "\\nHash Ant.: " + str(self._previousHash)
         return info
 
-    def verifyBlock(self, hashAnterior):
-        if hashAnterior == self._previousHash:
+    def verifyBlock(self, hashAnteriorBA):
+        if hashAnteriorBA == self._previousHash:
             return True
-        self._checker = False
+        # self._checker = False
         return False
 
 
@@ -92,21 +95,23 @@ class Blockchain:
         graph += "node[shape = \"box\"]\n"
         graph += self.__graficar()
         graph += '}'
-        file = open(f"{nombreImagen}.dot", "w")
+        direccion = self.pathImageGraph()
+        file = open(f"{direccion}\\{nombreImagen}.dot", "w")
         file.write(graph)
         file.close()
-        os.system(f'dot -Tpng {nombreImagen}.dot -o {nombreImagen}.png')
+        os.system(f'dot -Tpng {direccion}\\{nombreImagen}.dot -o {direccion}\\{nombreImagen}.png')
 
     def __graficar(self):
         graph = ""
+        bandera = True
         for i in range(len(self.blocks_list)):
             info = self.blocks_list[i].getInfoGraph()
             nodo = 'node' + str(self.blocks_list[i].getIdBlock())
             color = "green"
-            hashAnterior = self.blocks_list[i].getPreviousHash()
 
             # If is not the first, verify the previous hash
             if not (i == 0):
+                hashAnterior = self.blocks_list[i-1].getIdHash()
                 brokeChain = self.blocks_list[i].verifyBlock(str(hashAnterior))
 
             # If is the first, verify the actual hash, because the first always has previous in 0
@@ -116,46 +121,51 @@ class Blockchain:
 
             if not brokeChain:
                 self.checkerChain = False
+                bandera = False
+
+            if bandera is False:
                 color = "red"
 
             # If is not the last to put the next pointer
             if not (i == (len(self.blocks_list) - 1)):
                 nextId = self.blocks_list[i + 1].getIdBlock()
                 nextNodo = 'node' + str(nextId)
-                graph += nodo + f'[label="{info}", color="{color}"]\n'
+                graph += nodo + f'[label="{info}", color="{color}", penwidth=3]\n'
                 graph += nodo + '->' + nextNodo + '\n'
 
             # If is the Last not put the next pointer
             else:
-                graph += nodo + f'[label="{info}", color="{color}"]\n'
+                graph += nodo + f'[label="{info}", color="{color}", penwidth=3]\n'
 
             # If is not the First to the Back pointer
             if not (i == 0):
                 nodoAnterior = "node" + str(self.blocks_list[i-1].getIdBlock())
-                graph += nodo + '->' + nodoAnterior + "\n"
-
+                if color == "green":
+                    graph += nodo + '->' + nodoAnterior + "\n"
+                graph += nodoAnterior + f"[color={color}]"
         return graph
 
     def updateBlock(self, oldTuple, newTuple, nameJson):
         # Cambiando valores de la lista y generando nuevo hash
-        newHash = self.generate_hash(newTuple)
         file = open(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json", "r")
         JSblock_list = json.loads(file.read())
         file.close()
 
-        # Recorriendo JSON
+        newHash = self.generate_hash(newTuple)
+
+        # Recorriendo y actualizando JSON
         for blockJS in JSblock_list:
-            if oldTuple == blockJS[1][0]:
-                blockJS[1][0] = newTuple
+            if oldTuple == blockJS[1]:
+                blockJS[1] = newTuple
                 blockJS[3] = newHash
 
-        # actualizando JSON
+        # recorriendo y actualizando Block list
         for block in self.blocks_list:
-            if oldTuple == block.getData()[0]:
-                block.getData()[0] = newTuple
+            if oldTuple == block.getData():
+                block.setData(newTuple)
                 block.setIdHash(newHash)
 
-        file = open("tabla1.json", "w+")
+        file = open(os.getcwd() + "\\DataJsonBC\\" + nameJson + ".json", "w+")
         file.write(json.dumps(JSblock_list))
         file.close()
 
@@ -167,3 +177,15 @@ class Blockchain:
         os.makedirs(os.getcwd() + "\\DataJsonBC")
         file = open(os.getcwd() + "\\DataJsonBC\\" + nombre + ".json", "+w")
         return file
+
+    def pathImageGraph(self):
+        if not os.path.isdir(os.getcwd() + "\\ImageBlockChain"):
+            os.makedirs(os.getcwd() + "\\ImageBlockChain")
+        direccion = os.getcwd() + "\\ImageBlockChain"
+        return direccion
+
+    def removeFilesBlock(self, nameJson):
+        if os.path.isdir(os.getcwd() + "ImageBlockChain"):
+            if os.path.isfile(os.getcwd() + "\\ImageBlockChain\\" + nameJson + ".json"):
+                os.remove(os.getcwd() + "\\ImageBlockChain\\" + nameJson + ".json")
+                os.remove(os.getcwd() + "\\ImageBlockChain\\" + nameJson + ".dot")

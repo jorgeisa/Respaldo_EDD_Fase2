@@ -248,10 +248,6 @@ def test3():
     print(extractRangeTable('db5', 'Table1_DB5', 0, 'A1', 'C1'))
     print(extractRangeTable('db6', 'Table1_DB6', 0, 'A1', 'C1'))
 
-    print('#' * 20 + ' UPDATE' + '#' * 20)
-    print(update('db3', 'Table1_DB3', {1: 'JORGE'}, [1]))
-    print(extractTable('db3', 'Table1_DB3'))
-
     print('#' * 20 + ' Alter Add PK')
     print(alterAddPK('db1', 'Table1_DB1', [1]))
     print(alterAddPK('db2', 'Table1_DB2', [1]))
@@ -260,13 +256,14 @@ def test3():
     print(alterAddPK('db5', 'Table1_DB5', [1]))
     print(alterAddPK('db6', 'Table1_DB6', [1]))
 
+    # insert('db3', 'Table1_DB3', ['A1', 'B1', 'C1'])
+    # insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']
     print('#' * 20 + ' UPDATE' + '#' * 20)
-    print(update('db3', 'Table1_DB3', {1: 'JORGE8'}, ['C1']))
-    print(extractTable('db3', 'Table1_DB3'))
+    # print(extractRow('db3', 'Table1_DB3', ['C1']))
 
-    print('#' * 20 + ' UPDATE' + '#' * 20)
-    print(update('db1', 'Table1_DB1', {1: 'JORGE8'}, ['B1']))
-    print(extractTable('db1', 'Table1_DB1'))
+    print(update('db1', 'Table1_DB1', {0: 'JORGE8'}, ['B1']))
+    # print(extractRow('db3', 'Table1_DB3', ['C1']))
+    # print(extractTable('db3', 'Table1_DB3'))
 
     print('#' * 20 + ' Alter Drop PK')
     print(alterDropPK('db1', 'Table1_DB1'))
