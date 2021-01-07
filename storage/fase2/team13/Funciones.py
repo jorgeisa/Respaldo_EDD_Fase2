@@ -1147,14 +1147,15 @@ def update(database, table, register, columns):
                 newTuple = []
 
                 # Generate the new Tuple
-                for i in oldTuple:
-                    newTuple.append(i)
+                for i in range(len(oldTuple)):
+                    decodificado = oldTuple[i].decode(dictionary[database][1])
+                    oldTuple[i] = decodificado
+                    newTuple.append(decodificado)
 
                 for key in register:
-                    newTuple[key] = register[key]
+                    newTuple[key] = register[key].decode(dictionary[database][1])
 
                 nameJson = str(database) + '-' + str(table)
-
                 tabla_info[2].updateBlock(oldTuple, newTuple, nameJson)
                 graphBChain(tabla_info[2], nameJson)
                 save(dictionary, 'metadata')

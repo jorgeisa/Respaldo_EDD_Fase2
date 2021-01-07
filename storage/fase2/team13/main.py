@@ -180,10 +180,6 @@ def test3():
     print(createTable('db6', 'Table3_DB6', 3), end='-')
     print(createTable('db6', 'Table4_DB6', 3))
 
-    print()
-    print('#' * 20 + ' Security Mode ' + '#' * 20)
-    print(safeModeOn('db1', 'Table1_DB1'))  # No tiene tuplas pero si activa el modo seguro de la tabla
-
     print('#' * 20 + ' Insert')
     print(insert('db1', 'Table1_DB1', ['A1', 'B1', 'C1']), end='-')
     print(insert('db1', 'Table2_DB1', ['A2', 'B2', 'C2']), end='-')
