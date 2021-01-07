@@ -107,7 +107,7 @@ def test2():
     print('----------------------------------------------')
     print(alterTableCompress('db1', 'Table1_DB1', 8))
     print(extractTable('db1', 'Table1_DB1'))
-    print(alterTableDecompress('db1', 'Table1_DB1',))
+    print(alterTableDecompress('db1', 'Table1_DB1', ))
     print(extractTable('db1', 'Table1_DB1'))
 
     print('#' * 20 + ' Extract Row')
