@@ -186,9 +186,6 @@ def test3():
 
     print('#' * 20 + ' Insert')
     print(insert('db1', 'Table1_DB1', ['A1', 'B1', 'C1']), end='-')
-    print(insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']), end='-')
-    print(insert('db1', 'Table1_DB1', ['A21', 'B22', 'C23']), end='-')
-    print(insert('db1', 'Table1_DB1', ['31', 'B32', 'C33']), end='-')
     print(insert('db1', 'Table2_DB1', ['A2', 'B2', 'C2']), end='-')
     print(insert('db1', 'Table3_DB1', ['A3', 'B3', 'C3']), end='-')
 
@@ -214,6 +211,11 @@ def test3():
     print(insert('db6', 'Table2_DB6', ['A2', 'B2', 'C2']), end='-')
     print(insert('db6', 'Table3_DB6', ['A3', 'B3', 'C3']))
 
+
+    print()
+    print('#' * 20 + ' EXTRACTROW ' + '#' * 20)
+    print(extractRow('db1', 'Table1_DB1', [2]))
+
     print('#' * 20 + ' Show Tables')
     print(showTables('db1'))
     print(showTables('db2'))
@@ -224,12 +226,11 @@ def test3():
 
     print()
     print('#' * 20 + ' Security Mode ' + '#' * 20)
-    print(safeModeOff('db1', 'Table1_DB1'))  # Borrar archivos o imagenes que tenga
-    print(safeModeOn('db1', 'Table1_DB1'))  # Armar ya el blockchain con tuplas
-    print(insert('db1', 'Table1_DB1', ['41', 'B42', 'C43']))
-
     print(safeModeOn('db1', 'Table1_DB1'))
-    print(safeModeOn('db2', 'Table1_DB2'))
+    print(insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']), end='-')
+    print(insert('db1', 'Table1_DB1', ['A21', 'B22', 'C23']), end='-')
+    print(insert('db1', 'Table1_DB1', ['A31', 'B32', 'C33']), end='-')
+    print(insert('db1', 'Table1_DB1', ['41', 'B42', 'C43']))
     dictionary = load('metadata')
     showDict(dictionary)
 
@@ -257,17 +258,8 @@ def test3():
     print(alterAddPK('db5', 'Table1_DB5', [1]))
     print(alterAddPK('db6', 'Table1_DB6', [1]))
 
-    '''
-    print(insert('db1', 'Table1_DB1', ['A1', 'B1', 'C1']), end='-')
-    print(insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']), end='-')
-    print(insert('db1', 'Table1_DB1', ['A21', 'B22', 'C23']), end='-')
-    print(insert('db1', 'Table1_DB1', ['31', 'B32', 'C33']), end='-')
-    print(insert('db1', 'Table2_DB1', ['A2', 'B2', 'C2']), end='-')
-    print(insert('db1', 'Table3_DB1', ['A3', 'B3', 'C3']), end='-')
-    '''
-
     print('#' * 20 + ' UPDATE' + '#' * 20)
-    print(update('db1', 'Table1_DB1', {0: 'JORGE8'}, ['B1']))
+    print(update('db1', 'Table1_DB1', {0: 'JORGE8'}, ['B32']))
     # print(safeModeOff('db1', 'Table1_DB1'))
 
     print('#' * 20 + ' Alter Drop PK')
