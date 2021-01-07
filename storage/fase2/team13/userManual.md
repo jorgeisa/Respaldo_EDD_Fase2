@@ -28,7 +28,7 @@ La página de inicio cuenta con las siguientes opciones:
 - **Cargar:** Solicita la url del archivo CSV que se desea cargar.
 
 <p align="center">
-  <img src="images/principal.png" width="500" alt="TytusDB Architecture">
+  <img src="images/principal.png" width="500" alt="Tytus">
 </p>
 
 ___
@@ -39,7 +39,7 @@ Cada ventana cuenta con un botón "Ver estructura" que al presionarlo automátic
 
 
 <p align="center">
-  <img src="images/bases.png" width="500" alt="TytusDB Architecture">
+  <img src="images/bases.png" width="500" alt="Tytus">
 </p>
 
 ___
@@ -48,7 +48,7 @@ Esta ventana se utiliza para solicitar el nombre de la base de datos si el repor
 Al momento de presionar "Confirmar" si los datos son correctos, se abrirá una nueva ventana mostrando una imagen del reporte solicitado.
 
 <p align="center">
-  <img src="images/grafos.png" width="300" alt="TytusDB Architecture">
+  <img src="images/grafos.png" width="300" alt="Tytus">
 </p>
 
 ___
@@ -56,5 +56,5 @@ ___
 Para la parte de blockchain es similar a grafos, a diferencia que los 2 campos que se solicitan son obligatorios, de igual forma al presionar "Confirmar" se abrirá una nueva ventana mostrando la imagen de los bloques que fueron afectados.
 
 <p align="center">
-  <img src="images/blockchain.png" width="300" alt="TytusDB Architecture">
+  <img src="images/blockchain.png" width="300" alt="Tytus">
 </p>
