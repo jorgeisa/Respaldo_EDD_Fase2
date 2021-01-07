@@ -1138,7 +1138,7 @@ def update(database, table, register, columns):
         # ----------------------------------------------------- ISAAC --------------------------------------------------
         # Method to Blockchain
         if value_return == 0:
-            print(j.extractRow(database, table, columns))
+            print(j.extractRow(database, table, newColumns))
             dict_tables = dictionary.get(database)[2]
             tabla_info = dict_tables.get(table)
 
