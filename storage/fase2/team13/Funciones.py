@@ -678,6 +678,16 @@ def showFK(dictionary):
     for key in dictionary:
         print(key, ':', dictionary[key])
 
+def showUNIQUE(dictionary):
+    print('--UNIQUE INDEX--')
+    for key in dictionary:
+        print(key, ':', dictionary[key])
+
+def showINDEX(dictionary):
+    print('--INDEX--')
+    for key in dictionary:
+        print(key, ':', dictionary[key])
+
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # SHOW DICTIONARY
