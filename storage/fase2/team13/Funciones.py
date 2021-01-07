@@ -154,6 +154,7 @@ def alterTableAddUnique(database, table, indexName, columns):
                         j.insert(database, 'UNIQUE', [database, table, indexName, columns])
                         UNIQUE.update({indexName: [database, table, indexName, columns]})
                         save(UNIQUE, 'UNIQUE')
+                        return 0
                     return 1
                 return 4
             return 3
