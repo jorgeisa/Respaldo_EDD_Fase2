@@ -180,15 +180,8 @@ def test3():
     print(createTable('db6', 'Table3_DB6', 3), end='-')
     print(createTable('db6', 'Table4_DB6', 3))
 
-    print()
-    print('#' * 20 + ' Security Mode ' + '#' * 20)
-    print(safeModeOn('db1', 'Table1_DB1'))
-
     print('#' * 20 + ' Insert')
     print(insert('db1', 'Table1_DB1', ['A1', 'B1', 'C1']), end='-')
-    print(insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']), end='-')
-    print(insert('db1', 'Table1_DB1', ['A21', 'B22', 'C23']), end='-')
-    print(insert('db1', 'Table1_DB1', ['31', 'B32', 'C33']), end='-')
     print(insert('db1', 'Table2_DB1', ['A2', 'B2', 'C2']), end='-')
     print(insert('db1', 'Table3_DB1', ['A3', 'B3', 'C3']), end='-')
 
@@ -226,8 +219,10 @@ def test3():
 
     print()
     print('#' * 20 + ' Security Mode JIJIJIJ' + '#' * 20)
-    print(safeModeOff('db1', 'Table1_DB1'))
     print(safeModeOn('db1', 'Table1_DB1'))
+    print(insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']), end='-')
+    print(insert('db1', 'Table1_DB1', ['A21', 'B22', 'C23']), end='-')
+    print(insert('db1', 'Table1_DB1', ['A31', 'B32', 'C33']), end='-')
     print(insert('db1', 'Table1_DB1', ['41', 'B42', 'C43']))
     dictionary = load('metadata')
     showDict(dictionary)
@@ -259,10 +254,9 @@ def test3():
     # insert('db3', 'Table1_DB3', ['A1', 'B1', 'C1'])
     # insert('db1', 'Table1_DB1', ['A11', 'B12', 'C13']
     print('#' * 20 + ' UPDATE' + '#' * 20)
-    # print(extractRow('db3', 'Table1_DB3', ['C1']))
 
-    print(update('db1', 'Table1_DB1', {0: 'JORGE8'}, ['B1']))
-    print(safeModeOff('db1', 'Table1_DB1'))
+    print(update('db1', 'Table1_DB1', {0: 'JORGE8'}, ['B32']))
+    # print(safeModeOff('db1', 'Table1_DB1'))
     # print(extractRow('db3', 'Table1_DB3', ['C1']))
     # print(extractTable('db3', 'Table1_DB3'))
 

@@ -90,13 +90,10 @@ def safeModeOn(database, table):
             # If object Blockchain is None
             if tabla_info[2] is None:
                 mode = dictionary.get(database)[0]
-                j = checkMode(mode)
-                list_tuple = j.extractTable(database, table)
-                nameJson = str(database) + '-' + str(table)
-                BChain = make_block_chain(list_tuple, nameJson)
+                BChain = make_block_chain()
                 tabla_info[2] = BChain
-                save(dictionary, 'metadata')
-                return 0
+            save(dictionary, 'metadata')
+            return 0
         # If modeSecurity es ON
         return 4
     except:
@@ -205,12 +202,9 @@ def insertAgain(database, mode, newMode):
 
 
 # Blockchain mode when the security mode is on
-def make_block_chain(list_tuple, nameJson):
+def make_block_chain():
     # list_tuple = [['A2', 'B2', 'C2'], ['A3', 'B3', 'C3']]
     BChain = Blockchain()
-    for tuple in list_tuple:
-        BChain.insertBlock(tuple, nameJson)
-        graphBChain(BChain, nameJson)
     return BChain
 
 
@@ -488,8 +482,7 @@ def insert(database, table, register):
                 # The object block chain
                 tabla_info[2].insertBlock(register, nameJson)
                 graphBChain(tabla_info[2], nameJson)
-
-
+                save(dictionary, 'metadata')
         return value_return
     except:
         return 1
