@@ -1025,6 +1025,10 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def alterAddPK(database, table, columns):
     try:
+        if os.path.isfile(os.getcwd() + '\\Data\\PK.bin'):
+            PK = load('PK')
+        else:
+            PK = {}
         dictionary = load('metadata')
 
         if dictionary.get(database) is None:
@@ -1033,6 +1037,8 @@ def alterAddPK(database, table, columns):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.alterAddPK(database, table, columns)
+        PK.update({table: [database, table, columns]})
+        save(PK, 'PK')
         return value_return
     except:
         return 1
@@ -1156,6 +1162,11 @@ def dropTable(database, table):
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
 def insert(database, table, register):
     try:
+        if os.path.isfile(os.getcwd() + '\\Data\\PK.bin'):
+            PK = load('PK')
+        else:
+            PK = {}
+
         dictionary = load('metadata')
 
         if dictionary.get(database) is None:
@@ -1170,6 +1181,8 @@ def insert(database, table, register):
             else:
                 newRegister.append(c)
         value_return = j.insert(database, table, newRegister)
+        if PK.get(table) is None:
+            PK.update({table: [database, table, ['HIDDEN']]})
 
         # ----------------------------------------------------- ISAAC --------------------------------------------------
         # Method to Blockchain
