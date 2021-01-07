@@ -243,9 +243,9 @@ def alterTableCompress(database, table, level):
             for tuple in tableEx:
                 newTuple = []
                 for register in tuple:
-                    if isinstance(register, str):
+                    if isinstance(register, bytes):
                         # print("Tamaño sin comprimir %d" % len(register))
-                        compressed = zlib.compress(register.encode(), level)
+                        compressed = zlib.compress(register, level)
                         # print("Tamaño comprimido %d" % len(compressed))
                         newTuple.append(compressed)
                     else:
@@ -292,7 +292,7 @@ def alterTableDecompress(database, table):
                         # print("Tamaño sin comprimir %d" % len(register))
                         decompressed = zlib.decompress(register)
                         # print("Tamaño comprimido %d" % len(compressed))
-                        newTuple.append(decompressed.decode("utf-8"))
+                        newTuple.append(decompressed)
                     else:
                         newTuple.append(register)
 
@@ -334,9 +334,9 @@ def alterDatabaseCompress(database, level):
                 for tuple in tableEx:
                     newTuple = []
                     for register in tuple:
-                        if isinstance(register, str):
+                        if isinstance(register, bytes):
                             # print("Tamaño sin comprimir %d" % len(register))
-                            compressed = zlib.compress(register.encode(), level)
+                            compressed = zlib.compress(register, level)
                             # print("Tamaño comprimido %d" % len(compressed))
                             newTuple.append(compressed)
                         else:
@@ -383,7 +383,7 @@ def alterDatabaseDecompress(database):
                             # print("Tamaño sin comprimir %d" % len(register))
                             decompressed = zlib.decompress(register)
                             # print("Tamaño comprimido %d" % len(compressed))
-                            newTuple.append(decompressed.decode("utf-8"))
+                            newTuple.append(decompressed)
                         else:
                             newTuple.append(register)
 

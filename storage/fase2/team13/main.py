@@ -73,6 +73,7 @@ def test():
     print(alterTableDropFK('db6', 'Table2_DB6', 'Rel4'))  # 0
     showFK(load('FK'))
 
+
 def test2():
     print('#' * 20 + ' Create Database')
     print(createDatabase('db1', 'avl', 'utf8'), end='-')
@@ -103,12 +104,17 @@ def test2():
     print(insert('db2', 'Table1_DB2', ['A4_DB2', 'B4', 'C4']))
     print(checksumTable('db2', 'Table1_DB2', 'SHA256'))
     print(showChecksums(load('checksum')))
+    print('----------------------------------------------')
+    print(alterTableCompress('db1', 'Table1_DB1', 8))
+    print(extractTable('db1', 'Table1_DB1'))
+    print(alterTableDecompress('db1', 'Table1_DB1',))
+    print(extractTable('db1', 'Table1_DB1'))
 
     print('#' * 20 + ' Extract Row')
     print(extractRow('db1', 'Table1_DB1', [1]))
 
     print('#' * 20 + ' Update')
-    print(update('db1', 'Table1_DB1', {1:'B1_Update'},[1]))
+    print(update('db1', 'Table1_DB1', {1: 'B1_Update'}, [1]))
 
     print('#' * 20 + ' Extract Row')
     print(extractRow('db1', 'Table1_DB1', [1]))
@@ -132,6 +138,7 @@ def test2():
     print(extractRow('db2', 'Table1_DB2', [0]))
     print(extractRow('db2', 'Table1_DB2', [1]))
     print(extractRow('db2', 'Table1_DB2', [2]))
+
 
 def test3():
     print('#' * 20 + ' Create Database')
@@ -217,7 +224,7 @@ def test3():
 
     print()
     print('#' * 20 + ' Security Mode ' + '#' * 20)
-    print(safeModeOff('db1', 'Table1_DB1'))  #  Borrar archivos o imagenes que tenga
+    print(safeModeOff('db1', 'Table1_DB1'))  # Borrar archivos o imagenes que tenga
     print(safeModeOn('db1', 'Table1_DB1'))  # Armar ya el blockchain con tuplas
     print(insert('db1', 'Table1_DB1', ['41', 'B42', 'C43']))
 
@@ -303,7 +310,6 @@ def test3():
 
 
 def testCompress():
-
     print(createDatabase('db1', 'b', 'utf8'))
     print(createDatabase('db2', 'avl', 'utf8'))
 
@@ -316,7 +322,9 @@ def testCompress():
     print(insert('db1', 'Table1_DB1', ['ABC', 'DEF', 'GHI']))
     print(insert('db1', 'Table2_DB1', ['A ver si funciona esto xd', 'F en el chat', 'Si sale el lab']))
     print(insert('db1', 'Table3_DB1', ['ya super F', 'Isaac es mal coordinador', 'Son bromas es un papucho']))
-    print(insert('db2', 'Table1_DB2', ['Test de compresion de las bases de datos xdxd', 'Ya no se que mas poner en estas tuplas jsjsjs', 'F en el chat']))
+    print(insert('db2', 'Table1_DB2',
+                 ['Test de compresion de las bases de datos xdxd', 'Ya no se que mas poner en estas tuplas jsjsjs',
+                  'F en el chat']))
 
     print('#' * 10 + ' Before')
     print(extractTable('db1', 'Table1_DB1'))
@@ -352,5 +360,6 @@ def testCompress():
     # print('#' * 10 + ' Decompress')
     # print(extractTable('db1', 'Table1_DB1'))
 
-test3()
+
+test2()
 # testCompress()
