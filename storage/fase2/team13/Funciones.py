@@ -689,6 +689,10 @@ def showINDEX(dictionary):
     for key in dictionary:
         print(key, ':', dictionary[key])
 
+def showPK(dictionary):
+    print('--PRIMARY KEYS--')
+    for key in dictionary:
+        print(key, ':', dictionary[key])
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # SHOW DICTIONARY
