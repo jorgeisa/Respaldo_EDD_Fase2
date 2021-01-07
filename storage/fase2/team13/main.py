@@ -211,7 +211,6 @@ def test3():
     print(insert('db6', 'Table2_DB6', ['A2', 'B2', 'C2']), end='-')
     print(insert('db6', 'Table3_DB6', ['A3', 'B3', 'C3']))
 
-
     print()
     print('#' * 20 + ' EXTRACTROW ' + '#' * 20)
     print(extractRow('db1', 'Table1_DB1', [2]))
@@ -353,5 +352,5 @@ def testCompress():
     # print(extractTable('db1', 'Table1_DB1'))
 
 
-test2()
+test3()
 # testCompress()

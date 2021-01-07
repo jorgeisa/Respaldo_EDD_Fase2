@@ -1126,11 +1126,14 @@ def update(database, table, register, columns):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         # Save the old tuple for the BChain method
-        oldTuple = j.extractRow(database, table, columns)
+        newColumns = []
+        for key in columns:
+            newColumns.append(key.encode(dictionary[database][1]))
+        oldTuple = j.extractRow(database, table, newColumns)
         for key in register:
             if isinstance(register[key], str):
                 register.update({key: register[key].encode(dictionary[database][1])})
-        value_return = j.update(database, table, register, columns)
+        value_return = j.update(database, table, register, newColumns)
 
         # ----------------------------------------------------- ISAAC --------------------------------------------------
         # Method to Blockchain
