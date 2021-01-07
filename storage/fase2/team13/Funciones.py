@@ -842,16 +842,7 @@ def extractTable(database, table):
             return []
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        registers = j.extractTable(database, table)
-        value_return = []
-        for r in registers:
-            newRegister = []
-            for c in r:
-                if isinstance(c, bytes):
-                    newRegister.append(c.decode(dictionary[database][1]))
-                else:
-                    newRegister.append(c)
-            value_return.append(newRegister)
+        value_return = j.extractTable(database, table)
 
         # compress
         for tuple in value_return:
@@ -865,7 +856,15 @@ def extractTable(database, table):
 
             newTable.append(newTuple)
 
-        value_return = newTable
+        value_return = []
+        for r in newTable:
+            newRegister = []
+            for c in r:
+                if isinstance(c, bytes):
+                    newRegister.append(c.decode(dictionary[database][1]))
+                else:
+                    newRegister.append(c)
+            value_return.append(newRegister)
 
         return value_return
     except:
@@ -885,16 +884,7 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
             return []
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        registers = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
-        value_return = []
-        for r in registers:
-            newRegister = []
-            for c in r:
-                if isinstance(c, bytes):
-                    newRegister.append(c.decode(dictionary[database][1]))
-                else:
-                    newRegister.append(c)
-            value_return.append(newRegister)
+        value_return = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
 
         # compress
         for tuple in value_return:
@@ -908,7 +898,15 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
 
             newTable.append(newTuple)
 
-        value_return = newTable
+        value_return = []
+        for r in newTable:
+            newRegister = []
+            for c in r:
+                if isinstance(c, bytes):
+                    newRegister.append(c.decode(dictionary[database][1]))
+                else:
+                    newRegister.append(c)
+            value_return.append(newRegister)
 
         return value_return
     except:
