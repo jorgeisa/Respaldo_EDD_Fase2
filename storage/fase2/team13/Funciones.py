@@ -859,7 +859,7 @@ def extractTable(database, table):
             for register in tuple:
                 if iscompressed(register):
                     decompressed = zlib.decompress(register)
-                    newTuple.append(decompressed.decode("utf-8"))
+                    newTuple.append(decompressed)
                 else:
                     newTuple.append(register)
 
@@ -902,7 +902,7 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
             for register in tuple:
                 if iscompressed(register):
                     decompressed = zlib.decompress(register)
-                    newTuple.append(decompressed.decode("utf-8"))
+                    newTuple.append(decompressed)
                 else:
                     newTuple.append(register)
 
