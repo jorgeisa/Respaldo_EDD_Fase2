@@ -1187,6 +1187,7 @@ def insert(database, table, register):
         value_return = j.insert(database, table, newRegister)
         if PK.get(table) is None:
             PK.update({table: [database, table, ['HIDDEN']]})
+            save(PK, 'PK')
 
         # ----------------------------------------------------- ISAAC --------------------------------------------------
         # Method to Blockchain
