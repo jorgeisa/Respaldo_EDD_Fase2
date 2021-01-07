@@ -2,7 +2,9 @@ import os
 import pickle
 import shutil
 import zlib
+import hashlib
 from Blockchain import *
+
 # COMMITS
 ''' NO SE SUBE: main, carpetas de data, images, storage (por el momento) '''
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
@@ -16,6 +18,7 @@ from Blockchain import *
 databases = {}  # LIST WITH DIFFERENT MODES
 dict_encoding = {'ascii': 1, 'iso-8859-1': 2, 'utf8': 3}
 dict_modes = {'avl': 1, 'b': 2, 'bplus': 3, 'dict': 4, 'isam': 5, 'json': 6, 'hash': 7}
+algoritms = ['SHA256', 'MD5']
 
 
 # ---------------------------------------------------- FASE 2  ---------------------------------------------------------
@@ -92,7 +95,7 @@ def alterTableAddFK(database, table, indexName, columns, tableRef, columnsRef):
             if (table in tables) and (tableRef in tables):
                 if len(columns) != 0 and len(columnsRef) != 0:
                     if FK.get(indexName) is not None:
-                        return 6
+                        return 1
                     FK.update({indexName: [database, indexName, table, columns, tableRef, columnsRef]})
                     save(FK, 'FK')
                     return 0
@@ -126,6 +129,98 @@ def alterTableDropFK(database, table, indexName):
             save(FK, 'FK')
     except:
         return 1
+
+
+def alterDatabaseEncoding(database, encoding):
+    try:
+        if dict_encoding.get(encoding) is not None:
+            db = load('metadata')
+            if db.get(database) is not None:
+                j = checkMode(db[database][0])
+                tables = j.showTables(database)
+                DB = {}
+                for t in tables:
+                    registers = j.extractTable(database, t)
+                    newRegisters = []
+                    for r in registers:
+                        newRegister = []
+                        for c in r:
+                            if isinstance(c, bytes):
+                                aux = c.decode(db[database][1]).encode(encoding, 'replace')
+                                if '?' in str(aux):
+                                    return 1
+                                newRegister.append(aux)
+                            else:
+                                newRegister.append(c)
+                        newRegisters.append(newRegister)
+                    DB.update({t: newRegisters})
+                for key in DB:
+                    j.truncate(database, key)
+                    registers = DB[key]
+                    for r in registers:
+                        j.insert(database, key, r)
+                db[database][1] = encoding
+                save(db, 'metadata')
+                return 0
+            return 2
+        return 3
+    except:
+        return 1
+
+
+def checksumDatabase(database, mode):
+    try:
+        if os.path.isfile(os.getcwd() + "\\Data\\checksum.bin"):
+            CHCK = load('checksum')
+        else:
+            CHCK = {}
+        db = load('metadata')
+        if db.get(database) is not None:
+            j = checkMode(db[database][0])
+            tables = j.showTables(database)
+            if mode.upper() in algoritms:
+                content = None
+                if mode.upper() == 'MD5':
+                    content = hashlib.md5()
+                elif mode.upper() == 'SHA256':
+                    content = hashlib.sha256()
+                for t in tables:
+                    file = open(getRouteTable(db[database][0], database, t), 'rb')
+                    content.update(file.read())
+                    file.close()
+                    CHCK.update({database: content.hexdigest()})
+                    save(CHCK, 'checksum')
+                    return CHCK[database]
+            return None
+        return None
+    except:
+        return None
+
+
+def checksumTable(database, table, mode):
+    try:
+        if os.path.isfile(os.getcwd() + "\\Data\\checksum.bin"):
+            CHCK = load('checksum')
+        else:
+            CHCK = {}
+        db = load('metadata')
+        if db.get(database) is not None:
+            if mode.upper() in algoritms:
+                content = None
+                if mode.upper() == 'MD5':
+                    content = hashlib.md5()
+                elif mode.upper() == 'SHA256':
+                    content = hashlib.sha256()
+                file = open(getRouteTable(db[database][0], database, table), 'rb')
+                content.update(file.read())
+                file.close()
+                CHCK.update({table: content.hexdigest()})
+                save(CHCK, 'checksum')
+                return CHCK[table]
+            return None
+        return None
+    except:
+        return None
 
 
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
@@ -165,7 +260,7 @@ def alterTableCompress(database, table, level):
 
             save(dictionary, 'metadata')
             return 0
-            #print(newTable)
+            # print(newTable)
 
         else:
             return 2
@@ -225,8 +320,6 @@ def alterDatabaseCompress(database, level):
         if level > 9 or level < 0:
             return 4
 
-
-
         dictionary = load('metadata')
         value_db = dictionary.get(database)
         mode = dictionary.get(database)[0]
@@ -258,7 +351,7 @@ def alterDatabaseCompress(database, level):
 
                 save(dictionary, 'metadata')
             return 0
-                #print(newTable)
+            # print(newTable)
 
         else:
             return 2
@@ -303,7 +396,7 @@ def alterDatabaseDecompress(database):
 
                 save(dictionary, 'metadata')
             return 0
-                #print(newTable)
+            # print(newTable)
 
         else:
             return 2
@@ -384,7 +477,7 @@ def safeModeOff(database, table):
     except:
         return 1
 
-    
+
 # GRAPHDSD
 def graphDSD(database):
     dictionaryFK = load('FK')
@@ -423,16 +516,38 @@ def graphDSD(database):
     file = open("DSD.dot", "w")
     file.write(string)
     file.close()
-    os.system("dot -Tpng DSD.dot -o DSD.png")    
-    
+    os.system("dot -Tpng DSD.dot -o DSD.png")
+
     return string
-    
-    
+
+
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
+
+def showChecksums(dictionary):
+    print('--CHECKSUMS--')
+    for key in dictionary:
+        print(key, ':', dictionary[key])
+
+
+def getRouteTable(mode, database, table):
+    if mode == 'avl':
+        return os.getcwd() + '\\Data\\avlMode\\' + database + '_' + table + '.tbl'
+    elif mode == 'b':
+        return os.getcwd() + '\\Data\\b\\' + database + '-' + table.lower() + '-b.bin'
+    elif mode == 'bplus':
+        return os.getcwd() + '\\Data\\BPlusMode\\' + database + '\\' + table + '\\' + table + '.bin'
+    elif mode == 'dict':
+        return os.getcwd() + '\\Data\\' + database + '\\' + table + '.bin'
+    elif mode == 'isam':
+        return os.getcwd() + '\\Data\\ISAMMode\\tables\\' + database.lower() + table.lower() + '.bin'
+    elif mode == 'json':
+        return os.getcwd() + '\\Data\\json\\' + database + '-' + table
+    elif mode == 'hash':
+        return os.getcwd() + '\\Data\\hash\\' + database + '\\' + table + '.bin'
 
 
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
-#If tuple is compressed
+# If tuple is compressed
 def tupleIsnotCompressed(array):
     flag = True
 
@@ -445,7 +560,7 @@ def tupleIsnotCompressed(array):
 
 
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
-#if is compressed
+# if is compressed
 def iscompressed(data):
     result = True
     try:
@@ -557,17 +672,17 @@ def listGraph(list_):
     string += "node[shape = \"ellipse\", fillcolor = \"turquoise\", style = \"filled\", fontcolor = \"black\" ]\n"
 
     for i in range(0, len(list_)):
-        string += f'node{hash(list_[i])*hash(list_[i])} [ label = "{list_[i]}"]\n'
-        if i == len(list_)-1:
+        string += f'node{hash(list_[i]) * hash(list_[i])} [ label = "{list_[i]}"]\n'
+        if i == len(list_) - 1:
             pass
         else:
-            string += f'node{hash(list_[i])*hash(list_[i])} -> node{hash(list_[i+1])*hash(list_[i+1])}\n'
+            string += f'node{hash(list_[i]) * hash(list_[i])} -> node{hash(list_[i + 1]) * hash(list_[i + 1])}\n'
 
     string += '}'
     file = open("List.circo", "w")
     file.write(string)
     file.close()
-    os.system("circo -Tpng List.circo -o List.png")        
+    os.system("circo -Tpng List.circo -o List.png")
 
 
 # ----------------------------------------------------- DILAN/KEVIN ----------------------------------------------------------
@@ -577,7 +692,7 @@ def concatenateStrings(list_):
         if i == len(list_) - 1:
             string += str(list_[i])
         else:
-            string += str(list_[i])+', '
+            string += str(list_[i]) + ', '
     return string
 
 
@@ -592,18 +707,18 @@ def tupleGraph(list_):
         tuple_i = concatenateStrings(list_[i])
 
         string += f'node{hash(tuple_i) * hash(tuple_i)} [ label = "{tuple_i}"]\n'
-        if i == len(list_)-1:
+        if i == len(list_) - 1:
             pass
         else:
             tuple_iplus = concatenateStrings(list_[i + 1])
-            string += f'node{hash(tuple_i)*hash(tuple_i)} -> node{hash(tuple_iplus)*hash(tuple_iplus)}\n'
+            string += f'node{hash(tuple_i) * hash(tuple_i)} -> node{hash(tuple_iplus) * hash(tuple_iplus)}\n'
 
     string += '}'
     file = open("List.circo", "w")
     file.write(string)
     file.close()
     os.system("circo -Tpng List.circo -o List.png")
-       
+
 
 # SELECT ONLY ONE DATABASE
 def FKDatabse(dictionary, database):
@@ -613,7 +728,7 @@ def FKDatabse(dictionary, database):
         if values[0] == database:
             listValues.append(values)
 
-    return listValues    
+    return listValues
 
 
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
@@ -724,44 +839,19 @@ def extractTable(database, table):
         dictionary = load('metadata')
         value_base = dictionary.get(database)
         if not value_base:
-            return None
+            return []
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        value_return = j.extractTable(database, table)
-
-        #compress
-        for tuple in value_return:
-            newTuple = []
-            for register in tuple:
-                if iscompressed(register):
-                    decompressed = zlib.decompress(register)
-                    newTuple.append(decompressed.decode("utf-8"))
+        registers = j.extractTable(database, table)
+        value_return = []
+        for r in registers:
+            newRegister = []
+            for c in r:
+                if isinstance(c, bytes):
+                    newRegister.append(c.decode(dictionary[database][1]))
                 else:
-                    newTuple.append(register)
-
-            newTable.append(newTuple)
-
-        value_return = newTable
-
-        return value_return
-    except:
-        return None
-
-
-# ----------------------------------------------------- JORGE ----------------------------------------------------------
-def extractRangeTable(database, table, columnNumber, lower, upper):
-    try:
-        newTable = []
-
-        database = str(database)
-        table = str(table)
-        dictionary = load('metadata')
-        value_base = dictionary.get(database)
-        if not value_base:
-            return None
-        mode = dictionary.get(database)[0]
-        j = checkMode(mode)
-        value_return = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
+                    newRegister.append(c)
+            value_return.append(newRegister)
 
         # compress
         for tuple in value_return:
@@ -779,7 +869,50 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
 
         return value_return
     except:
-        return None
+        return []
+
+
+# ----------------------------------------------------- JORGE ----------------------------------------------------------
+def extractRangeTable(database, table, columnNumber, lower, upper):
+    try:
+        newTable = []
+
+        database = str(database)
+        table = str(table)
+        dictionary = load('metadata')
+        value_base = dictionary.get(database)
+        if not value_base:
+            return []
+        mode = dictionary.get(database)[0]
+        j = checkMode(mode)
+        registers = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
+        value_return = []
+        for r in registers:
+            newRegister = []
+            for c in r:
+                if isinstance(c, bytes):
+                    newRegister.append(c.decode(dictionary[database][1]))
+                else:
+                    newRegister.append(c)
+            value_return.append(newRegister)
+
+        # compress
+        for tuple in value_return:
+            newTuple = []
+            for register in tuple:
+                if iscompressed(register):
+                    decompressed = zlib.decompress(register)
+                    newTuple.append(decompressed.decode("utf-8"))
+                else:
+                    newTuple.append(register)
+
+            newTable.append(newTuple)
+
+        value_return = newTable
+
+        return value_return
+    except:
+        return []
 
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
@@ -881,7 +1014,7 @@ def alterDropColumn(database, table, columnNumber):
         if value_return == 0:
             dict_tables = dictionary.get(database)[2]
             number_columns = dict_tables.get(table)[0]
-            dict_tables.get(table)[0] = number_columns-1  # Updating number of columns
+            dict_tables.get(table)[0] = number_columns - 1  # Updating number of columns
 
             save(dictionary, 'metadata')
 
@@ -891,7 +1024,7 @@ def alterDropColumn(database, table, columnNumber):
 
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
-def dropTable(database, table) :
+def dropTable(database, table):
     try:
         dictionary = load('metadata')
 
@@ -914,16 +1047,22 @@ def dropTable(database, table) :
 # -------------------------------------------------- Tuples CRUD -------------------------------------------------------
 
 # ----------------------------------------------------- DILAN ----------------------------------------------------------
-def insert(database, table, register):    
+def insert(database, table, register):
     try:
         dictionary = load('metadata')
-        
+
         if dictionary.get(database) is None:
             return 2  # database doesn't exist
-        
+
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        value_return = j.insert(database, table, register)
+        newRegister = []
+        for c in register:
+            if isinstance(c, str):
+                newRegister.append(c.encode(dictionary[database][1]))
+            else:
+                newRegister.append(c)
+        value_return = j.insert(database, table, newRegister)
 
         # ----------------------------------------------------- ISAAC --------------------------------------------------
         # Method to Blockchain
@@ -949,8 +1088,20 @@ def loadCSV(file, database, table):
     try:
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        value_return = j.loadCSV(file, database, table)
-        return value_return
+        file = open(file, 'r')
+        file = file.read()
+        registers = file.split('\n')
+        results = []
+        for r in registers:
+            newRegister = []
+            register = r.split(',')
+            for c in register:
+                if isinstance(c, str):
+                    newRegister.append(c.encode(dictionary[database][1]))
+                else:
+                    newRegister.append(c)
+            results.append(j.insert(database, table, newRegister))
+        return results
     except:
         return []
 
@@ -961,8 +1112,14 @@ def extractRow(database, table, columns):
     try:
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        value_return = j.extractRow(database, table, columns)
-        return value_return
+        register = j.extractRow(database, table, columns)
+        newRegister = []
+        for c in register:
+            if isinstance(c, bytes):
+                newRegister.append(c.decode(dictionary[database][1]))
+            else:
+                newRegister.append(c)
+        return newRegister
     except:
         return []
 
@@ -979,6 +1136,9 @@ def update(database, table, register, columns):
         j = checkMode(mode)
         # Save the old tuple for the BChain method
         oldTuple = j.extractRow(database, table, columns)
+        for key in register:
+            if isinstance(register[key], str):
+                register.update({key: register[key].encode(dictionary[database][1])})
         value_return = j.update(database, table, register, columns)
 
         # ----------------------------------------------------- ISAAC --------------------------------------------------
@@ -1044,7 +1204,6 @@ def save(objeto, nombre):
     if os.path.isfile(os.getcwd() + "\\Data\\" + nombre + ".bin"):
         os.remove(os.getcwd() + "\\Data\\" + nombre + ".bin")
     shutil.move(os.getcwd() + "\\" + nombre + ".bin", os.getcwd() + "\\Data")
-
 
 
 # ----------------------------------------------------- KEVIN/JORGE ----------------------------------------------------------

@@ -91,6 +91,19 @@ def test2():
     print(insert('db2', 'Table1_DB2', ['A2_DB2', 'B2', 'C2']), end='-')
     print(insert('db2', 'Table1_DB2', ['A3_DB2', 'B3', 'C3']))
 
+    print(alterDatabaseEncoding('db1', 'iso-8859-1'))
+    print(extractTable('db1', 'Table1_DB1'))
+    print(checksumDatabase('db1', 'MD5'))
+    print(checksumDatabase('db1', 'MD5'))
+    print(insert('db1', 'Table1_DB1', ['A4', 'B4', 'C4']))
+    print(checksumDatabase('db1', 'MD5'))
+    print('----------------------------------------------')
+    print(checksumTable('db2', 'Table1_DB2', 'SHA256'))
+    print(checksumTable('db2', 'Table1_DB2', 'SHA256'))
+    print(insert('db2', 'Table1_DB2', ['A4_DB2', 'B4', 'C4']))
+    print(checksumTable('db2', 'Table1_DB2', 'SHA256'))
+    print(showChecksums(load('checksum')))
+
     print('#' * 20 + ' Extract Row')
     print(extractRow('db1', 'Table1_DB1', [1]))
 
