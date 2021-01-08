@@ -191,11 +191,11 @@ def ventana_principal():
     db = Button(text="Cargar", bg="#FFFFFF", image=img_subir, compound="top", font=("Georgia", 16), command=ventana_loadCSV)
     db.place(x=700, y=200)
 
-    imgGraph = PhotoImage(file="./images/grafos.png")
+    imgGraph = PhotoImage(file="./images/grafosBoton.png")
     buttonGrap = Button(text="Grafos", bg="#FFFFFF", image=imgGraph, compound="top", font=("Georgia", 16), command=lambda: windowReportsGraph())
     buttonGrap.place(x=500, y=400)
 
-    imgBlockchain = PhotoImage(file="./images/blockchain.png")
+    imgBlockchain = PhotoImage(file="./images/blockchainBoton.png")
     buttonBlockchain = Button(text="Blockchain", bg="#FFFFFF", image=imgBlockchain, compound="top", font=("Georgia", 16) ,command=lambda: windowBlockchain())
     buttonBlockchain.place(x=700, y=400)
 
@@ -405,19 +405,23 @@ def windowReportsGraph():
 
     def showGraph(database, table):
         try:
+            dictionary = load('metadata')
+            db = dictionary.get(database)
+            if db is None:
+                messagebox.showinfo('', 'DB no existe')
+                return
+
             if database != '' and table == '':  # graphDSD
                 print('graphDSD')
-                dictionary = load('metadata')
-                db = dictionary.get(database)
-                if db is None:
-                    messagebox.showinfo('', 'DB no existe')
-                    return
 
                 graphDSD(database)
                 ventana_imagen('./DSD.png')
 
             elif database != '' and table != '':  # graphDF
                 print('graphDF')
+
+                graphDF(database, table)
+                ventana_imagen('./DF.png')
             else:
                 messagebox.showinfo('', 'Debe rellenar los campos')
                 windowReportsGraph()
