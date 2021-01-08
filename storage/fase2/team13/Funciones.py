@@ -1083,13 +1083,36 @@ def dropDatabase(database):
     try:
         nombreBase = str(database)
         dictionary = load('metadata')
+        FK = load('FK')
+        UNIQUE = load('UNIQUE')
+        INDEX = load('INDEX')
+
         value_base = dictionary.get(nombreBase)
         if value_base:
             mode = dictionary.get(nombreBase)[0]
             j = checkMode(mode)
             j.dropDatabase(nombreBase)
             dictionary.pop(nombreBase)
+
+            if FK != 1:
+                for key in FK:
+                    if FK[key][0] == database:
+                        FK.pop(FK[key][1])
+
+            if INDEX != 1:
+                for key in INDEX:
+                    if INDEX[key][0] == database:
+                        INDEX.pop(INDEX[key][2])
+
+            if UNIQUE != 1:
+                for key in UNIQUE:
+                    if UNIQUE[key][0] == database:
+                        UNIQUE.pop(UNIQUE[key][2])
+
             save(dictionary, 'metadata')
+            save(FK, 'FK')
+            save(INDEX, 'INDEX')
+            save(UNIQUE, 'UNIQUE')
         return 2
     except:
         return 1
@@ -1338,6 +1361,9 @@ def alterDropColumn(database, table, columnNumber):
 def dropTable(database, table):
     try:
         dictionary = load('metadata')
+        FK = load('FK')
+        INDEX = load('INDEX')
+        UNIQUE = load('UNIQUE')
 
         if dictionary.get(database) is None:
             return 2  # database doesn't exist
@@ -1350,7 +1376,34 @@ def dropTable(database, table):
             dict_tables = dictionary.get(database)[2]
             dict_tables.pop(table)
 
+            if FK != 1:
+                for key in FK:
+                    values = FK[key]
+                    if values[0] == database:
+                        if table == values[2] or table == [4]:
+                            FK.pop(values[1])
+                            j.delete(database, 'FK', values[1])
+
+            if INDEX != 1:
+                for key in INDEX:
+                    values = INDEX[key]
+                    if values[0] == database:
+                        if table == values[1]:
+                            INDEX.pop(values[2])
+                            j.delete(database, 'INDEX', values[2])
+
+            if UNIQUE != 1:
+                for key in UNIQUE:
+                    values = UNIQUE[key]
+                    if values[0] == database:
+                        if table == values[1]:
+                            UNIQUE.pop(values[2])
+                            j.delete(database, 'UNIQUE', values[2])
+
             save(dictionary, 'metadata')
+            save(FK, 'FK')
+            save(UNIQUE, 'UNIQUE')
+            save(INDEX, 'INDEX')
     except:
         return 1
 
