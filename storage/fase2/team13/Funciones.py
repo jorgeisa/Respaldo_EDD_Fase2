@@ -605,45 +605,48 @@ def safeModeOff(database, table):
 
 # FIRST REPORT GRAPH
 def graphDSD(database):
-    dictionaryFK = load('FK')
-    listValues = FKDatabse(dictionaryFK, database)
-    dictionaryAux = {}
-    counter = 0
+    try:
+        dictionaryFK = load('FK')
+        listValues = FKDatabse(dictionaryFK, database)
+        dictionaryAux = {}
+        counter = 0
 
-    string = 'digraph G{\n'
-    string += f'label = "DIAGRAMA DE ESTRUCTURA DE DATOS: {database}"\n'
-    string += 'labelloc = \"t\"\n'
-    string += 'fontsize = \"30\"\n'
-    string += 'edge[ arrowhead = \"open\" ]\n'
-    string += "node[shape = \"ellipse\", fillcolor = \"turquoise\", style = \"filled\", fontcolor = \"black\" ]\n"
+        string = 'digraph G{\n'
+        string += f'label = "DIAGRAMA DE ESTRUCTURA DE DATOS: {database}"\n'
+        string += 'labelloc = \"t\"\n'
+        string += 'fontsize = \"30\"\n'
+        string += 'edge[ arrowhead = \"open\" ]\n'
+        string += "node[shape = \"ellipse\", fillcolor = \"turquoise\", style = \"filled\", fontcolor = \"black\" ]\n"
 
-    for element in range(0, len(listValues)):
-        listElement = listValues[element]
-        start = listElement[4]
-        end = listElement[2]
+        for element in range(0, len(listValues)):
+            listElement = listValues[element]
+            start = listElement[4]
+            end = listElement[2]
 
-        if dictionaryAux.get(start) is None:
-            dictionaryAux[start] = [start, counter]
-            counter += 1
-        if dictionaryAux.get(end) is None:
-            dictionaryAux[end] = [end, counter]
-            counter += 1
+            if dictionaryAux.get(start) is None:
+                dictionaryAux[start] = [start, counter]
+                counter += 1
+            if dictionaryAux.get(end) is None:
+                dictionaryAux[end] = [end, counter]
+                counter += 1
 
-        valuesStart = dictionaryAux.get(start)
-        valuesEnd = dictionaryAux.get(end)
-        string += f'node{valuesStart[1]} -> node{valuesEnd[1]}\n'
+            valuesStart = dictionaryAux.get(start)
+            valuesEnd = dictionaryAux.get(end)
+            string += f'node{valuesStart[1]} -> node{valuesEnd[1]}\n'
 
-    for key in dictionaryAux:
-        values = dictionaryAux.get(key)
-        string += f'node{values[1]} [ label = "{values[0]}"]\n'
+        for key in dictionaryAux:
+            values = dictionaryAux.get(key)
+            string += f'node{values[1]} [ label = "{values[0]}"]\n'
 
-    string += '}'
-    file = open("DSD.dot", "w")
-    file.write(string)
-    file.close()
-    os.system("dot -Tpng DSD.dot -o DSD.png")
+        string += '}'
+        file = open("DSD.dot", "w")
+        file.write(string)
+        file.close()
+        os.system("dot -Tpng DSD.dot -o DSD.png")
 
-    return string
+        return string
+    except:
+        return None
 
 
 # SECOND REPORT GRAPH
@@ -738,7 +741,7 @@ def graphDF(database, table):
 
         return string
     except:
-        return 'Error'
+        return None
 
 
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
