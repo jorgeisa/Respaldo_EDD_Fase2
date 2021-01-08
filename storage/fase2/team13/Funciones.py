@@ -4,6 +4,7 @@ import shutil
 import zlib
 import hashlib
 from Blockchain import *
+from cryptography.fernet import Fernet
 
 # COMMITS
 ''' NO SE SUBE: main, carpetas de data, images, storage (por el momento) '''
@@ -508,6 +509,25 @@ def alterDatabaseDecompress(database):
             return 2
     except:
         return 1
+
+
+# Encrypt and Decrypt
+def encrypt(backup, password):
+    f = Fernet(password)
+    encodedMessage = backup.encode()
+    encrypted = f.encrypt(encodedMessage)
+    return encrypted.decode()
+
+
+def decrypt(cripherBackup, password):
+    f = Fernet(password)
+    desencriptado = f.decrypt(cripherBackup.encode())
+    return desencriptado.decode()
+
+
+def generateKey():
+    key = Fernet.generate_key().decode()
+    return key
 
 
 # Blockchain
