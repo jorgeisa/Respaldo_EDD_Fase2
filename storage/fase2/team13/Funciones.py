@@ -864,6 +864,7 @@ def insertAgain(database, mode, newMode):
     tables = old_mode.showTables(database)
 
     dictionary = load('metadata')
+    dictPK = loadReturn('PK')  # return 1 if doesn't exist
     dict_tables = dictionary.get(database)[2]
 
     if tables:
@@ -871,6 +872,14 @@ def insertAgain(database, mode, newMode):
             register = old_mode.extractTable(database, name_table)  # [['A', '1'], ['B', '2'],  ['C', '3']]
             number_columns = dict_tables.get(name_table)[0]
             new_mode.createTable(database, name_table, number_columns)
+
+            # ADDING PK
+            if dictPK != 1:
+                values = dictPK.get(name_table)
+                if values:
+                    listPK = values[2]
+                    if 'HIDDEN' not in listPK:
+                        new_mode.alterAddPK(database, name_table, listPK)
 
             if register:  # There are registers
                 for list_register in old_mode.extractTable(database, name_table):
