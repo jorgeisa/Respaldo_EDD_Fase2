@@ -580,7 +580,7 @@ def safeModeOff(database, table):
         return 1
 
 
-# GRAPHDSD
+# FIRST REPORT GRAPH
 def graphDSD(database):
     dictionaryFK = load('FK')
     listValues = FKDatabse(dictionaryFK, database)
@@ -623,6 +623,101 @@ def graphDSD(database):
     return string
 
 
+# SECOND REPORT GRAPH
+def graphDF(database, table):
+    try:
+        dictUnique = load('UNIQUE')
+        dictDatabases = load('metadata')
+        dictPK = load('PK')
+        dictTables = dictDatabases.get(database)[2]
+        numberColumns = dictTables.get(table)[0]
+        values = databaseTableIndex(dictPK, database, table)
+        listPK = values[2]
+
+        listIndex = databaseTableIndex(dictUnique, database, table)
+        counter = 0
+        dictIndexUnique = {}
+        dictNormalIndex = {}
+        dictAuxPK = {}
+        rank = ''
+
+        if listIndex is None:
+            print('No existe la tabla para la base de datos seleccionada')
+            return
+        labelTable = concatenateColumns(table, listIndex[3], numberColumns, listPK)
+
+        string = 'digraph G{\n'
+        string += f'label = "DIAGRAMA DE DEPENDENCIA:\\n {database} - {table}"\n'
+        string += 'labelloc = \"t\"\n'
+        string += 'fontsize = \"30\"\n'
+        string += 'edge[ arrowhead = \"open\" ]\n'
+        string += "node[shape = \"ellipse\", fillcolor = \"olivedrab2\", style = \"filled\", fontcolor = \"black\" ]\n"
+        # TABLE GRAPHVIZ
+        string += f'node9898 [ shape = "box", label= "{labelTable}", width=1, height=1.5 ]\n'
+        string += "node[shape = \"ellipse\", fillcolor = \"turquoise\", style = \"filled\", fontcolor = \"black\" ]\n"
+
+        rank += '{ rank = same; '
+        # LIST PK
+        for i in listPK:
+            string += f'node{counter} [ label = "{i}_PK" ]\n'
+            dictAuxPK[i] = counter
+            rank += f'node{counter}; '
+            counter += 1
+        rank += '}\n'
+        string += rank
+
+        rank = ''
+        rank += '{ rank = same; '
+        # INDEX NODES UNIQUE
+        for i in listIndex[3]:
+            string += f'node{counter} [ label = "{i}_IU" ]\n'
+            dictIndexUnique[i] = counter
+            rank += f'node{counter}; '
+            counter += 1
+        rank += '}\n'
+        string += rank
+
+        rank = ''
+        rank += '{ rank = same; '
+        for i in range(0, numberColumns):
+            index = dictIndexUnique.get(i)
+            pk = dictAuxPK.get(i)
+            if index is None and pk is None:
+                string += f'node{counter} [ label = "{i}"]\n'
+                dictNormalIndex[i] = counter
+                rank += f'node{counter}; '
+                counter += 1
+        rank += '}\n'
+        string += rank
+
+        # CONECTIONS
+        # PK -> INDEX UNIQUE
+        for keyPK in dictAuxPK:
+            for keyUnique in dictIndexUnique:
+                string += f'node{dictAuxPK[keyPK]} -> node{dictIndexUnique[keyUnique]} [ color = "orangered1" ]\n'
+
+        # PK -> NORMAL INDEX
+        for keyPK in dictAuxPK:
+            for keyNormal in dictNormalIndex:
+                string += f'node{dictAuxPK[keyPK]} -> node{dictNormalIndex[keyNormal]} [ color = "orangered1" ]\n'
+
+        # INDEX UNIQUE -> NORMAL INDEX
+        for keyUnique in dictIndexUnique:
+            for keyNormal in dictNormalIndex:
+                string += f'node{dictIndexUnique[keyUnique]} -> node{dictNormalIndex[keyNormal]}[ color = "indigo" ]\n'
+
+        string += '}'
+
+        file = open("DF.dot", "w")
+        file.write(string)
+        file.close()
+        os.system("dot -Tpng DF.dot -o DF.png")
+
+        return string
+    except:
+        return 'Error'
+
+    
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
 
 def showChecksums(dictionary):
@@ -833,7 +928,7 @@ def tupleGraph(list_):
     os.system("circo -Tpng List.circo -o List.png")
 
 
-# SELECT ONLY ONE DATABASE
+# FIRST REPORT GRAPH: SELECT ONLY ONE DATABASE
 def FKDatabse(dictionary, database):
     listValues = []
     for key in dictionary:
@@ -844,6 +939,29 @@ def FKDatabse(dictionary, database):
     return listValues
 
 
+# SECOND REPORT GRAPH
+def concatenateColumns(table, listIndex, numberColumns, listPK):
+    string = ''
+    string += f'TABLA: {table}\\n'
+    for i in range(0, numberColumns):
+        if i in listIndex:
+            string += f'{i}_IU\\n'
+        elif i in listPK:
+            string += f'{i}_PK\\n'
+        else:
+            string += f'{i}\\n'
+
+    return string
+
+
+# SELECT ONLY ONE DATABASE AND TABLE
+def databaseTableIndex(dictionary, database, table):
+    for key in dictionary:
+        values = dictionary[key]
+        if values[0] == database and values[1] == table:
+            return values
+        
+        
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
 
