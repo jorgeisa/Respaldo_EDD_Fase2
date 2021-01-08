@@ -37,6 +37,18 @@ def test():
     showMode('b')
     showMode('bplus')
 
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 0
+    print(alterTableAddFK('db63', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 2
+    print(alterTableAddFK('db6', 'Table2', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 3
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1', [0]))  # 3
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [], 'Table1_DB6', [0]))  # 4
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', []))  # 4
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 6
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel2', [0, 1], 'Table1_DB6', [0]))  # 0
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel3', [0, 1], 'Table1_DB6', [0]))  # 0
+    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel4', [0, 1], 'Table1_DB6', [0]))  # 0
+    showFK(load('FK'))
+
     print('alterDatabaseMode: ', alterDatabaseMode('db6', 'bplus'))
     print('AFTER')
     dictionary = load('metadata')
@@ -52,24 +64,12 @@ def test():
 
     print(showTables('db6'))
 
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 0
-    print(alterTableAddFK('db63', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 2
-    print(alterTableAddFK('db6', 'Table2', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 3
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1', [0]))  # 3
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [], 'Table1_DB6', [0]))  # 4
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', []))  # 4
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel1', [0, 1], 'Table1_DB6', [0]))  # 6
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel2', [0, 1], 'Table1_DB6', [0]))  # 0
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel3', [0, 1], 'Table1_DB6', [0]))  # 0
-    print(alterTableAddFK('db6', 'Table2_DB6', 'Rel4', [0, 1], 'Table1_DB6', [0]))  # 0
-    showFK(load('FK'))
-
     print(alterTableDropFK('db63', 'Table2_DB6', 'Rel1'))  # 2
     print(alterTableDropFK('db6', 'Table4', 'Rel3'))  # 3
-    print(alterTableDropFK('db6', 'Table2_DB6', 'Rel3'))  # 4
+    print(alterTableDropFK('db6', 'Table2_DB6', 'Rel3'))  # 0
     print(alterTableDropFK('db6', 'Table2_DB6', 'Rel1'))  # 0
     print(alterTableDropFK('db6', 'Table2_DB6', 'Rel2'))  # 0
-    print(alterTableDropFK('db6', 'Table2_DB6', 'Rel3'))  # 0
+    print(alterTableDropFK('db6', 'Table2_DB6', 'Rel3'))  # 4
     print(alterTableDropFK('db6', 'Table2_DB6', 'Rel4'))  # 0
     showFK(load('FK'))
 
@@ -348,5 +348,5 @@ def testCompress():
     # print(extractTable('db1', 'Table1_DB1'))
 
 
-test3()
+test()
 # testCompress()

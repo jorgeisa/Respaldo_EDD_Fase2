@@ -136,6 +136,7 @@ def alterTableDropFK(database, table, indexName):
     except:
         return 1
 
+
 def alterTableAddUnique(database, table, indexName, columns):
     try:
         if os.path.isfile(os.getcwd() + '\\Data\\UNIQUE.bin'):
@@ -163,6 +164,7 @@ def alterTableAddUnique(database, table, indexName, columns):
     except:
         return 1
 
+
 def alterTableDropUnique(database, table, indexName):
     try:
         if os.path.isfile(os.getcwd() + '\\Data\\UNIQUE.bin'):
@@ -185,6 +187,7 @@ def alterTableDropUnique(database, table, indexName):
             save(UNIQUE, 'UNIQUE')
     except:
         return 1
+
 
 def alterTableAddIndex(database, table, indexName, columns):
     try:
@@ -737,7 +740,7 @@ def graphDF(database, table):
     except:
         return 'Error'
 
-    
+
 # ---------------------------------------------- AUXILIARY FUNCTIONS  --------------------------------------------------
 
 def showChecksums(dictionary):
@@ -794,20 +797,24 @@ def showFK(dictionary):
     for key in dictionary:
         print(key, ':', dictionary[key])
 
+
 def showUNIQUE(dictionary):
     print('--UNIQUE INDEX--')
     for key in dictionary:
         print(key, ':', dictionary[key])
+
 
 def showINDEX(dictionary):
     print('--INDEX--')
     for key in dictionary:
         print(key, ':', dictionary[key])
 
+
 def showPK(dictionary):
     print('--PRIMARY KEYS--')
     for key in dictionary:
         print(key, ':', dictionary[key])
+
 
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
 # SHOW DICTIONARY
@@ -864,26 +871,66 @@ def insertAgain(database, mode, newMode):
     tables = old_mode.showTables(database)
 
     dictionary = load('metadata')
-    dictPK = loadReturn('PK')  # return 1 if doesn't exist
+    dictPK = load('PK')  # return 1 if doesn't exist
+    dictFK = load('FK')
+    dictUNIQUE = load('UNIQUE')
+    dictINDEX = load('INDEX')
     dict_tables = dictionary.get(database)[2]
 
     if tables:
         for name_table in tables:
-            register = old_mode.extractTable(database, name_table)  # [['A', '1'], ['B', '2'],  ['C', '3']]
-            number_columns = dict_tables.get(name_table)[0]
-            new_mode.createTable(database, name_table, number_columns)
+            if name_table != 'FK' and name_table != 'UNIQUE' and name_table != 'INDEX':
+                register = old_mode.extractTable(database, name_table)  # [['A', '1'], ['B', '2'],  ['C', '3']]
+                number_columns = dict_tables.get(name_table)[0]
+                new_mode.createTable(database, name_table, number_columns)
 
-            # ADDING PK
-            if dictPK != 1:
-                values = dictPK.get(name_table)
-                if values:
-                    listPK = values[2]
-                    if 'HIDDEN' not in listPK:
-                        new_mode.alterAddPK(database, name_table, listPK)
+                # ADDING PK
+                if dictPK != 1:
+                    values = dictPK.get(name_table)
+                    if values:
+                        listPK = values[2]
+                        if 'HIDDEN' not in listPK:
+                            new_mode.alterAddPK(database, name_table, listPK)
 
-            if register:  # There are registers
-                for list_register in old_mode.extractTable(database, name_table):
-                    new_mode.insert(database, name_table, list_register)
+                if register:  # There are registers
+                    for list_register in old_mode.extractTable(database, name_table):
+                        new_mode.insert(database, name_table, list_register)
+
+            elif name_table == 'FK':
+                # ADDING FK
+                if dictFK != 1:
+                    for key in dictFK:
+                        new_mode_tables = new_mode.showTables(database)
+                        values = dictFK[key]
+                        if values[0] == database:
+                            if 'FK' not in new_mode_tables:
+                                new_mode.createTable(database, 'FK', 6)
+                                new_mode.alterAddPK(database, 'FK', [1])
+                            new_mode.insert(database, 'FK', dictFK[key])
+
+            elif name_table == 'UNIQUE':
+                # ADDING UNIQUE
+                if dictUNIQUE != 1:
+                    for key in dictUNIQUE:
+                        new_mode_tables = new_mode.showTables(database)
+                        values = dictUNIQUE[key]
+                        if values[0] == database:
+                            if 'UNIQUE' not in new_mode_tables:
+                                new_mode.createTable(database, 'UNIQUE', 4)
+                                new_mode.alterAddPK(database, 'UNIQUE', [2])
+                            new_mode.insert(database, 'UNIQUE', dictUNIQUE[key])
+
+            elif name_table == 'INDEX':
+                # ADDING INDEX
+                if dictINDEX != 1:
+                    for key in dictINDEX:
+                        new_mode_tables = new_mode.showTables(database)
+                        values = dictINDEX[key]
+                        if values[0] == database:
+                            if 'INDEX' not in new_mode_tables:
+                                new_mode.createTable(database, 'INDEX', 4)
+                                new_mode.alterAddPK(database, 'INDEX', [2])
+                            new_mode.insert(database, 'INDEX', dictINDEX[key])
 
         old_mode.dropDatabase(database)
 
@@ -989,8 +1036,8 @@ def databaseTableIndex(dictionary, database, table):
         values = dictionary[key]
         if values[0] == database and values[1] == table:
             return values
-        
-        
+
+
 # ------------------------------------------------------ FASE 1 --------------------------------------------------------
 # -------------------------------------------------- Data Base CRUD ----------------------------------------------------
 
@@ -1484,7 +1531,9 @@ def save(objeto, nombre):
 
 # ----------------------------------------------------- KEVIN/JORGE ----------------------------------------------------
 def load(nombre):
-    file = open(os.getcwd() + "\\Data\\" + nombre + ".bin", "rb")
-    objeto = file.read()
-    file.close()
-    return pickle.loads(objeto)
+    if os.path.isfile(os.getcwd() + '\\Data\\' + nombre + ".bin"):
+        file = open(os.getcwd() + "\\Data\\" + nombre + ".bin", "rb")
+        objeto = file.read()
+        file.close()
+        return pickle.loads(objeto)
+    return 1
