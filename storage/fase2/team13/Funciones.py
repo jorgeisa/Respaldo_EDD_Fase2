@@ -1469,9 +1469,9 @@ def alterDropColumn(database, table, columnNumber):
 def dropTable(database, table):
     try:
         dictionary = load('metadata')
-        FK = load('FK')
-        INDEX = load('INDEX')
-        UNIQUE = load('UNIQUE')
+        FK = loadReturn('FK')
+        INDEX = loadReturn('INDEX')
+        UNIQUE = loadReturn('UNIQUE')
 
         if dictionary.get(database) is None:
             return 2  # database doesn't exist
@@ -1491,6 +1491,7 @@ def dropTable(database, table):
                         if table == values[2] or table == [4]:
                             FK.pop(values[1])
                             j.delete(database, 'FK', values[1])
+                            save(FK, 'FK')
 
             if INDEX != 1:
                 for key in INDEX:
@@ -1499,6 +1500,7 @@ def dropTable(database, table):
                         if table == values[1]:
                             INDEX.pop(values[2])
                             j.delete(database, 'INDEX', values[2])
+                            save(INDEX, 'INDEX')
 
             if UNIQUE != 1:
                 for key in UNIQUE:
@@ -1507,11 +1509,9 @@ def dropTable(database, table):
                         if table == values[1]:
                             UNIQUE.pop(values[2])
                             j.delete(database, 'UNIQUE', values[2])
-
+                            save(UNIQUE, 'UNIQUE')
             save(dictionary, 'metadata')
-            save(FK, 'FK')
-            save(UNIQUE, 'UNIQUE')
-            save(INDEX, 'INDEX')
+        return value_return
     except:
         return 1
 

@@ -425,30 +425,51 @@ def final_test():
     # {0: success, 1: error, 2: db not exist, 3: table not exist, 4: PK duplicated, 5: out limit
     print('#' * 20 + ' Insert ' + '#' * 20)
     print(j.insert('db1', 'T1DB1', ['A1']), end='-')
+    print(j.insert('db1', 'T1DB1', ['A11']), end='-')
+    print(j.insert('db1', 'T1DB1', ['A111']), end='-')
+    print(j.insert('db1', 'T1DB1', ['A1111']), end='-')
     print(j.insert('db1', 'T2DB1', ['B1']), end='-')
     print(j.insert('db1', 'T3DB1', ['C1']))
 
     print(j.insert('db4', 'T1DB4', ['A1', 'A2']), end='-')
+    print(j.insert('db4', 'T1DB4', ['A11', 'A22']), end='-')
+    print(j.insert('db4', 'T1DB4', ['A111', 'A222']), end='-')
+    print(j.insert('db4', 'T1DB4', ['A1111', 'A2222']), end='-')
     print(j.insert('db4', 'T2DB4', ['B1', 'B2']), end='-')
     print(j.insert('db4', 'T3DB4', ['C1', 'C2']))
 
     print(j.insert('db7', 'T1DB7', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db7', 'T1DB7', ['A11', 'A22', 'A33']), end='-')
+    print(j.insert('db7', 'T1DB7', ['A111', 'A222', 'A333']), end='-')
+    print(j.insert('db7', 'T1DB7', ['A1111', 'A2222', 'A3333']), end='-')
     print(j.insert('db7', 'T2DB7', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db7', 'T3DB7', ['C1', 'C2', 'C3']))
 
     print(j.insert('db10', 'T1DB10', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db10', 'T1DB10', ['A11', 'A22', 'A33']), end='-')
+    print(j.insert('db10', 'T1DB10', ['A111', 'A222', 'A333']), end='-')
+    print(j.insert('db10', 'T1DB10', ['A1111', 'A2222', 'A3333']), end='-')
     print(j.insert('db10', 'T2DB10', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db10', 'T3DB10', ['C1', 'C2', 'C3']))
 
     print(j.insert('db13', 'T1DB13', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db13', 'T1DB13', ['A11', 'A22', 'A33']), end='-')
+    print(j.insert('db13', 'T1DB13', ['A111', 'A222', 'A333']), end='-')
+    print(j.insert('db13', 'T1DB13', ['A1111', 'A2222', 'A3333']), end='-')
     print(j.insert('db13', 'T2DB13', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db13', 'T3DB13', ['C1', 'C2', 'C3']))
 
     print(j.insert('db16', 'T1DB16', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db16', 'T1DB16', ['A11', 'A22', 'A33']), end='-')
+    print(j.insert('db16', 'T1DB16', ['A111', 'A222', 'A333']), end='-')
+    print(j.insert('db16', 'T1DB16', ['A1111', 'A2222', 'A3333']), end='-')
     print(j.insert('db16', 'T2DB16', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db16', 'T3DB16', ['C1', 'C2', 'C3']))
 
     print(j.insert('db19', 'T1DB19', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db19', 'T1DB19', ['A11', 'A22', 'A33']), end='-')
+    print(j.insert('db19', 'T1DB19', ['A111', 'A222', 'A333']), end='-')
+    print(j.insert('db19', 'T1DB19', ['A1111', 'A2222', 'A3333']), end='-')
     print(j.insert('db19', 'T2DB19', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db19', 'T3DB19', ['C1', 'C2', 'C3']))
 
@@ -586,7 +607,7 @@ def final_test():
     # def alterTable(database: str, tableOld: str, tableNew: str) -> int:
     # {0: success, 1: error, 2: db not exist, 3:tableOld not exist, 4: tableNew exist}
     print(j.alterTable('db101', 'T1DB1', 'T1DB101'))
-    print(j.alterTable('db104', 'T1DB4', 'T1DB104'))
+    print(j.alterTable('db104', 'T1DB4', 'T1DB104')) ####
     print(j.alterTable('db107', 'T1DB7', 'T1DB107'))
     print(j.alterTable('db110', 'T1DB10', 'T1DB110'))
     print(j.alterTable('db113', 'T1DB13', 'T1DB113'))
@@ -610,7 +631,7 @@ def final_test():
     # def alterAddColumn(database: str, table: str, default: any) -> int:
     # {0: success, 1: error, 2: db not exist, 3: table not exist}
     print(j.alterAddColumn('db101', 'T1DB101', 'NuevaColumna101'))
-    print(j.alterAddColumn('db104', 'T1DB104', 'NuevaColumna104'))
+    print(j.alterAddColumn('db104', 'T1DB104', 'NuevaColumna104')) ####
     print(j.alterAddColumn('db107', 'T1DB107', 'NuevaColumna107'))
     print(j.alterAddColumn('db110', 'T1DB110', 'NuevaColumna110'))
     print(j.alterAddColumn('db113', 'T1DB113', 'NuevaColumna113'))
@@ -628,6 +649,195 @@ def final_test():
     print(j.extractTable("db113", "T1DB113"))
     print(j.extractTable("db116", "T1DB116"))
     print(j.extractTable("db119", "T1DB119"))
+
+    print()
+    print('#' * 20 + ' alter Drop Column ' + '#' * 20)
+    # def alterDropColumn(database: str, table: str, columnNumber: int) -> int:
+    # {0: success, 1: error, 2: db not exist, 3: table not exist, 4: not eliminated or without columns, 5: out limit}
+    print(j.alterDropColumn('db101', 'T1DB101', 1))
+    print(j.alterDropColumn('db104', 'T1DB104', 2))
+    print(j.alterDropColumn('db107', 'T1DB107', 3))
+    print(j.alterDropColumn('db110', 'T1DB110', 3))
+    print(j.alterDropColumn('db113', 'T1DB113', 3))
+    print(j.alterDropColumn('db116', 'T1DB116', 3))
+    print(j.alterDropColumn('db119', 'T1DB119', 3))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB101"))
+    print(j.extractTable("db104", "T1DB104"))
+    print(j.extractTable("db107", "T1DB107"))
+    print(j.extractTable("db110", "T1DB110"))
+    print(j.extractTable("db113", "T1DB113"))
+    print(j.extractTable("db116", "T1DB116"))
+    print(j.extractTable("db119", "T1DB119"))
+
+    print()
+    print('#' * 20 + ' dropTable ' + '#' * 20)
+    # def dropTable(database: str, table: str) -> int:
+    # {0: success, 1: error, 2 db not exist, 3: table not exist}
+    print(j.dropTable('db101', 'T2DB1')) ####
+    print(j.dropTable('db104', 'T2DB4'))
+    print(j.dropTable('db107', 'T2DB7'))
+    print(j.dropTable('db110', 'T2DB10'))
+    print(j.dropTable('db113', 'T2DB13'))
+    print(j.dropTable('db116', 'T2DB16'))
+    print(j.dropTable('db119', 'T2DB19'))
+
+    print()
+    # def showDatabases() -> list:
+    # {[]: error, not tables, None: not db }
+    print('#' * 20 + ' showTables ' + '#' * 20)
+    print(j.showTables("db101"))
+    print(j.showTables("db104"))
+    print(j.showTables("db107"))
+    print(j.showTables("db110"))
+    print(j.showTables("db113"))
+    print(j.showTables("db116"))
+    print(j.showTables("db119"))
+
+    # Probando update con numeros
+    print(j.insert('db101', 'T3DB1', [110]))
+    print(j.insert('db101', 'T3DB1', [120]))
+    print(j.insert('db101', 'T3DB1', [130]))
+    print(j.insert('db101', 'T3DB1', [140]))
+    print(j.alterAddPK('db101', 'T3DB1', [0]))
+
+    print()
+    print('#' * 20 + ' update ' + '#' * 20)
+    # def update(database: str, table: str, register: dict, columns: list) -> int:
+    # {0: success, 1: error, 2 db not exist, 3: table not exist, 4:PK not exist}
+    print(j.update('db101', 'T1DB101', {0: 'Nuevo1'}, ['A1']))
+    print(j.update('db101', 'T3DB1', {0: 'Clear'}, [110]))
+    print(j.update('db101', 'T3DB1', {0: 'Clear1'}, ['C1']))
+    print(j.update('db104', 'T1DB104', {1: 'Nuevo1'}, ['A1']))
+    print(j.update('db107', 'T1DB107', {1: 'Nuevo1'}, ['A1']))
+    print(j.update('db110', 'T1DB110', {1: 'Nuevo1'}, ['A1']))
+    print(j.update('db113', 'T1DB113', {1: 'Nuevo1'}, ['A1']))
+    print(j.update('db116', 'T1DB116', {1: 'Nuevo1'}, ['A1']))
+    print(j.update('db119', 'T1DB119', {1: 'Nuevo1'}, ['A1']))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB101"))
+    print(j.extractTable("db101", "T3DB1"))
+    print(j.extractTable("db104", "T1DB104"))
+    print(j.extractTable("db107", "T1DB107"))
+    print(j.extractTable("db110", "T1DB110"))
+    print(j.extractTable("db113", "T1DB113"))
+    print(j.extractTable("db116", "T1DB116"))
+    print(j.extractTable("db119", "T1DB119"))
+
+    print()
+    # def extractRow(database: str, table: str, columns: list) -> list:
+    # {[tuple]: success , []: not registers, error}
+    print('#' * 20 + ' extract Row ' + '#' * 20)
+    print(j.extractRow("db101", "T1DB101", ['Nuevo1']))
+    print(j.extractRow("db101", "T3DB1", [110]))
+    print(j.extractRow("db104", "T1DB104", ['A1']))
+    print(j.extractRow("db107", "T1DB107", ['A1']))
+    print(j.extractRow("db110", "T1DB110", ['A1']))
+    print(j.extractRow("db113", "T1DB113", ['A1']))
+    print(j.extractRow("db116", "T1DB116", ['A1']))
+    print(j.extractRow("db119", "T1DB119", ['A1']))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB101"))
+    print(j.extractTable("db101", "T3DB1"))
+    print(j.extractTable("db104", "T1DB104"))
+    print(j.extractTable("db107", "T1DB107"))
+    print(j.extractTable("db110", "T1DB110"))
+    print(j.extractTable("db113", "T1DB113"))
+    print(j.extractTable("db116", "T1DB116"))
+    print(j.extractTable("db119", "T1DB119"))
+
+    print()
+    # def delete(database: str, table: str, columns: list) -> int:
+    # {0: success, 1: error, 2: db not exist, 3: table not exist, 4: PK not exist}
+    print('#' * 20 + ' delete ' + '#' * 20)
+    print(j.delete("db101", "T1DB101", ['Nuevo1']))
+    print(j.delete("db101", "T3DB1", ['Clear1']))
+    print(j.delete("db101", "T3DB1", [110]))
+    print(j.delete("db104", "T1DB104", ['A1']))
+    print(j.delete("db107", "T1DB107", ['A1']))
+    print(j.delete("db110", "T1DB110", ['A1']))
+    print(j.delete("db113", "T1DB113", ['A1']))
+    print(j.delete("db116", "T1DB116", ['A1']))
+    print(j.delete("db119", "T1DB119", ['A1']))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB101"))
+    print(j.extractTable("db101", "T3DB1"))
+    print(j.extractTable("db104", "T1DB104"))
+    print(j.extractTable("db107", "T1DB107"))
+    print(j.extractTable("db110", "T1DB110"))
+    print(j.extractTable("db113", "T1DB113"))
+    print(j.extractTable("db116", "T1DB116"))
+    print(j.extractTable("db119", "T1DB119"))
+
+    print()
+    # def truncate(database: str, table: str) -> int:
+    # {0: success, 1: error, 2: db not exist, 3: table not exist}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.truncate("db101", "T1DB101"))
+    print(j.truncate("db101", "T3DB1"))
+    print(j.truncate("db104", "T1DB104"))
+    print(j.truncate("db107", "T1DB107"))
+    print(j.truncate("db110", "T1DB110"))
+    print(j.truncate("db113", "T1DB113"))
+    print(j.truncate("db116", "T1DB116"))
+    print(j.truncate("db119", "T1DB119"))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB101"))
+    print(j.extractTable("db101", "T3DB1"))
+    print(j.extractTable("db104", "T1DB104"))
+    print(j.extractTable("db107", "T1DB107"))
+    print(j.extractTable("db110", "T1DB110"))
+    print(j.extractTable("db113", "T1DB113"))
+    print(j.extractTable("db116", "T1DB116"))
+    print(j.extractTable("db119", "T1DB119"))
+
+    print()
+    # def loadCSV(file: str, database: str, table: str) -> list:
+    # {int insert: success, []: error}
+    # {0: success, 1: error, 2: db not exist, 3: table not exist, 4: PK duplicated, 5: out limit
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.loadCSV('ids.csv', "db101", "T1DB101"))
+    print(j.loadCSV('ids.csv', "db101", "T3DB1"))
+    print(j.loadCSV("idsnames.csv", "db104", "T1DB104"))
+    print(j.loadCSV("treeColumnsProfesors.csv", "db107", "T1DB107"))
+    print(j.loadCSV("treeColumnsProfesors.csv", "db110", "T1DB110"))
+    print(j.loadCSV("treeColumnsProfesors.csv", "db113", "T1DB113"))
+    print(j.loadCSV("treeColumnStudent.csv", "db116", "T1DB116"))
+    print(j.loadCSV("treeColumnStudent.csv", "db119", "T1DB119"))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB101"))
+    print(j.extractTable("db101", "T3DB1"))
+    print(j.extractTable("db104", "T1DB104"))
+    print(j.extractTable("db107", "T1DB107"))
+    print(j.extractTable("db110", "T1DB110"))
+    print(j.extractTable("db113", "T1DB113"))
+    print(j.extractTable("db116", "T1DB116"))
+    print(j.extractTable("db119", "T1DB119"))
+
 
 # mode: 'avl', 'b', 'bplus', 'dict', 'isam', 'json', 'hash'
 final_test()
