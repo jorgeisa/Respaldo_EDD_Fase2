@@ -16,7 +16,7 @@ ___
 TytusDB es un proyecto Open Source para desarrollar un administrador de bases de datos. En la fase 1 se buscó implementar las formas de almacenamiento de datos así como la manipulación con las distintas funciones que se definieron en su momento. <br>
 Para esta fase 2, además de definir nuevas funciones de administración de índices se busca principalmente la seguridad de la información.
 <p align="center">
-  <img src="images/Diagrama.png" width="400" alt="TytusDB Architecture">
+  <img src="images/Diagrama.png" width="400" alt="TytusDB">
 </p>
 
 ___
@@ -136,7 +136,7 @@ ___
 ## Diagrama de clases 
 
 <p align="center">
-  <img src="images/DiagramaClases.png" width="800" alt="TytusDB Architecture">
+  <img src="images/DiagramaClases.png" width="800" alt="TytusDB">
 </p>
 
 ___
