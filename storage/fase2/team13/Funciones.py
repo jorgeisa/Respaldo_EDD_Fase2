@@ -1075,7 +1075,7 @@ def alterDatabase(databaseOld, databaseNew):
         mode = dictionary.get(str(databaseOld))[0]
         j = checkMode(mode)
         value_return = j.alterDatabase(databaseOld, databaseNew)
-        if value_return == 0:
+        if value_return == 0 or (value_return == 1 and dictionary[databaseOld][0] == 'isam'):
             info = dictionary[str(databaseOld)]
             dictionary.pop(str(databaseOld))
             dictionary[str(databaseNew)] = info
@@ -1221,6 +1221,10 @@ def extractRangeTable(database, table, columnNumber, lower, upper):
             return []
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
+        if isinstance(lower, str):
+            lower = lower.encode(dictionary[database][1])
+        if isinstance(upper, str):
+            upper = upper.encode(dictionary[database][1])
         value_return = j.extractRangeTable(database, table, int(columnNumber), lower, upper)
 
         # compress
