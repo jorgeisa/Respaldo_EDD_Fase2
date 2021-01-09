@@ -276,7 +276,7 @@ def test():
     print()
 
     print('--DELETE--')
-    print(delete('db4', 'Table1', 'A3'))
+    print(delete('db4', 'Table1', ['A3']))
     print()
     print('--EXTRACT TABLE--')
     print(extractTable('db4', 'Table1'))

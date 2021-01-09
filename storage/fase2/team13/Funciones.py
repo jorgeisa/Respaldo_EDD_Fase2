@@ -1497,7 +1497,13 @@ def extractRow(database, table, columns):
     try:
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        register = j.extractRow(database, table, columns)
+        new_Columns = []
+        for i in columns:
+            if isinstance(i, str):
+                new_Columns.append(i.encode(dictionary[database][1]))
+            else:
+                new_Columns.append(i)
+        register = j.extractRow(database, table, new_Columns)
         newRegister = []
         for c in register:
             if isinstance(c, bytes):
@@ -1565,7 +1571,13 @@ def delete(database, table, columns):
     try:
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        value_return = j.delete(database, table, columns)
+        new_Columns = []
+        for i in columns:
+            if isinstance(i, str):
+                new_Columns.append(i.encode(dictionary[database][1]))
+            else:
+                new_Columns.append(i)
+        value_return = j.delete(database, table, new_Columns)
         return value_return
     except:
         return 1
@@ -1578,6 +1590,7 @@ def truncate(database, table):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.truncate(database, table)
+        return value_return
     except:
         return 1
 
