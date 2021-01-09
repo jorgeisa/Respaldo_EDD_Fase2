@@ -1,5 +1,5 @@
 from Funciones import *
-
+import Funciones as j
 
 def test():
     print('#' * 10 + '  DATABASES  ')
@@ -409,7 +409,7 @@ def final_test():
     print(j.createTable('db10', 'T2DB10', 3), end='-')
     print(j.createTable('db10', 'T3DB10', 3))
 
-    print(j.createTable('db13', 't1db13', 3), end='-')
+    print(j.createTable('db13', 'T1DB13', 3), end='-')
     print(j.createTable('db13', 'T2DB13', 3), end='-')
     print(j.createTable('db13', 'T3DB13', 3))
 
@@ -440,7 +440,7 @@ def final_test():
     print(j.insert('db10', 'T2DB10', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db10', 'T3DB10', ['C1', 'C2', 'C3']))
 
-    print(j.insert('db13', 't1db13', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db13', 'T1DB13', ['A1', 'A2', 'A3']), end='-')
     print(j.insert('db13', 'T2DB13', ['B1', 'B2', 'B3']), end='-')
     print(j.insert('db13', 'T3DB13', ['C1', 'C2', 'C3']))
 
@@ -464,18 +464,16 @@ def final_test():
     print('#' * 20 + ' extract Table Prueba1: sin cambiar nombre ' + '#' * 20)
     print(j.extractTable("db1", "T1DB1"))
     print(j.extractTable("db4", "T1DB4"))
-    print(j.extractTable("db4", "T2DB4"))
-    print(j.extractTable("db4", "T3DB4"))
     print(j.extractTable("db7", "T1DB7"))
     print(j.extractTable("db10", "T1DB10"))
-    print(j.extractTable("db13", "t1db13"))
+    print(j.extractTable("db13", "T1DB13"))
     print(j.extractTable("db16", "T1DB16"))
     print(j.extractTable("db19", "T1DB19"))
 
     print()
     print('#' * 20 + ' Show Tables y exctract Table ISAM ' + '#' * 20)
     print(j.showTables("db13"))
-    print(j.extractTable("db13", "t3db13"))  # isam mode
+    print(j.extractTable("db13", "T3DB13"))  # isam mode
 
     # def alterDatabase(databaseOld, databaseNew) -> int:
     # {0: success, 1: error, 2: dbOld not exist, 3: dbNew exist}
@@ -529,7 +527,7 @@ def final_test():
     print(j.extractTable("db104", "T1DB4"))
     print(j.extractTable("db107", "T1DB7"))
     print(j.extractTable("db110", "T1DB10"))
-    print(j.extractTable("db113", "t3db13"))
+    print(j.extractTable("db113", "T3DB13"))
     print(j.extractTable("db116", "T1DB16"))
     print(j.extractTable("db119", "T1DB19"))
 
@@ -539,7 +537,11 @@ def final_test():
     # {[]: not registers, None: not db, not table, error}
     print(j.extractRangeTable("db1", "T1DB1", 1, "A", "A"))
 
+    print()
+    print('#' * 20 + ' extract Range Table ' + '#' * 20)
+
+
 # mode: 'avl', 'b', 'bplus', 'dict', 'isam', 'json', 'hash'
 final_test()
-test()
+# test()
 # testCompress()
