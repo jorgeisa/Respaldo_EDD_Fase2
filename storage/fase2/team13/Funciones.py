@@ -878,10 +878,10 @@ def insertAgain(database, mode, newMode):
     tables = old_mode.showTables(database)
 
     dictionary = load('metadata')
-    dictPK = load('PK')  # return 1 if doesn't exist
-    dictFK = load('FK')
-    dictUNIQUE = load('UNIQUE')
-    dictINDEX = load('INDEX')
+    dictPK = loadReturn('PK')  # return 1 if doesn't exist
+    dictFK = loadReturn('FK')
+    dictUNIQUE = loadReturn('UNIQUE')
+    dictINDEX = loadReturn('INDEX')
     dict_tables = dictionary.get(database)[2]
 
     if tables:
@@ -1333,7 +1333,7 @@ def alterAddColumn(database, table, default):
 
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
-        value_return = j.alterDropColumn(database, table, default)
+        value_return = j.alterAddColumn(database, table, default)
 
         if value_return == 0:
             dict_tables = dictionary.get(database)[2]
@@ -1597,6 +1597,12 @@ def save(objeto, nombre):
 
 # ----------------------------------------------------- KEVIN/JORGE ----------------------------------------------------
 def load(nombre):
+    file = open(os.getcwd() + "\\Data\\" + nombre + ".bin", "rb")
+    objeto = file.read()
+    file.close()
+    return pickle.loads(objeto)
+
+def loadReturn(nombre):
     if os.path.isfile(os.getcwd() + '\\Data\\' + nombre + ".bin"):
         file = open(os.getcwd() + "\\Data\\" + nombre + ".bin", "rb")
         objeto = file.read()

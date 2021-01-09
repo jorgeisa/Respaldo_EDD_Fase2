@@ -13,7 +13,7 @@ def test():
     print()
 
     print('--SHOW DATABASES--')
-    print(showDict(load('metadata')))
+    print(showDatabases())
 
     print()
     print()
@@ -191,7 +191,7 @@ def test():
     print(alterDatabase('db1', 'db1_Update'))
     print()
     print('--SHOW DATABASES--')
-    print(showDict(load('metadata')))
+    print(showDatabases())
     print()
 
     print('--EXTRACT TABLE--')
@@ -261,7 +261,7 @@ def test():
     print()
 
     print('--EXTRACT ROW--')
-    print(extractRow('db1', 'Table3', ['C3']))
+    print(extractRow('db1_Update', 'Table3', ['C3']))
 
     print()
     print()
