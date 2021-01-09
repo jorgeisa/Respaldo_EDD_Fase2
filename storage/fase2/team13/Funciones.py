@@ -1139,6 +1139,7 @@ def dropDatabase(database):
             save(FK, 'FK')
             save(INDEX, 'INDEX')
             save(UNIQUE, 'UNIQUE')
+            return 0
         return 2
     except:
         return 1
@@ -1298,6 +1299,10 @@ def alterAddPK(database, table, columns):
 # ----------------------------------------------------- KEVIN ----------------------------------------------------------
 def alterDropPK(database, table):
     try:
+        if os.path.isfile(os.getcwd() + '\\Data\\PK.bin'):
+            PK = load('PK')
+        else:
+            PK = {}
         dictionary = load('metadata')
 
         value_base = dictionary.get(database)
@@ -1307,6 +1312,8 @@ def alterDropPK(database, table):
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
         value_return = j.alterDropPK(database, table)
+        PK.pop(table)
+        save(PK, 'PK')
         return value_return
     except:
         return 2
@@ -1350,6 +1357,8 @@ def alterAddColumn(database, table, default):
 
         mode = dictionary.get(database)[0]
         j = checkMode(mode)
+        if isinstance(default, str):
+            default = default.encode(dictionary[database][1])
         value_return = j.alterAddColumn(database, table, default)
 
         if value_return == 0:
