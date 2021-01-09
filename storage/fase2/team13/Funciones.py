@@ -913,7 +913,13 @@ def insertAgain(database, mode, newMode):
                             if 'FK' not in new_mode_tables:
                                 new_mode.createTable(database, 'FK', 6)
                                 new_mode.alterAddPK(database, 'FK', [1])
-                            new_mode.insert(database, 'FK', dictFK[key])
+                            new_tuple = []
+                            for i in dictFK[key]:
+                                if isinstance(i, str):
+                                    new_tuple.append(i.encode(dictionary[database][1]))
+                                else:
+                                    new_tuple.append(i)
+                            new_mode.insert(database, 'FK', new_tuple)
 
             elif name_table == 'UNIQUE':
                 # ADDING UNIQUE
@@ -925,7 +931,13 @@ def insertAgain(database, mode, newMode):
                             if 'UNIQUE' not in new_mode_tables:
                                 new_mode.createTable(database, 'UNIQUE', 4)
                                 new_mode.alterAddPK(database, 'UNIQUE', [2])
-                            new_mode.insert(database, 'UNIQUE', dictUNIQUE[key])
+                            new_tuple = []
+                            for i in dictUNIQUE[key]:
+                                if isinstance(i, str):
+                                    new_tuple.append(i.encode(dictionary[database][1]))
+                                else:
+                                    new_tuple.append(i)
+                            new_mode.insert(database, 'UNIQUE', new_tuple)
 
             elif name_table == 'INDEX':
                 # ADDING INDEX
@@ -937,8 +949,13 @@ def insertAgain(database, mode, newMode):
                             if 'INDEX' not in new_mode_tables:
                                 new_mode.createTable(database, 'INDEX', 4)
                                 new_mode.alterAddPK(database, 'INDEX', [2])
-                            new_mode.insert(database, 'INDEX', dictINDEX[key])
-
+                            new_tuple = []
+                            for i in dictINDEX[key]:
+                                if isinstance(i, str):
+                                    new_tuple.append(i.encode(dictionary[database][1]))
+                                else:
+                                    new_tuple.append(i)
+                            new_mode.insert(database, 'INDEX', new_tuple)
         old_mode.dropDatabase(database)
 
 
