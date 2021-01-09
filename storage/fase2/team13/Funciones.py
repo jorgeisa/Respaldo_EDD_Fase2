@@ -611,6 +611,10 @@ def graphDSD(database):
         dictionaryAux = {}
         counter = 0
 
+        dictDatabases = load('metadata')
+        if dictDatabases.get(database) is None:
+            return None        
+        
         string = 'digraph G{\n'
         string += f'label = "DIAGRAMA DE ESTRUCTURA DE DATOS: {database}"\n'
         string += 'labelloc = \"t\"\n'
