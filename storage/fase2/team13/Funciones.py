@@ -1051,13 +1051,13 @@ def databaseTableIndex(dictionary, database, table):
 # createDatabase was modified in this fase
 
 # ----------------------------------------------------- ISAAC ----------------------------------------------------------
-def showDatabases(database):
+def showDatabases():
     try:
-        dictionary = load('metadata')
-        mode = dictionary.get(database)[0]
-        j = checkMode(mode)
-        value_return = j.showDatabases()
-        return value_return
+        for key in dict_modes:
+            print(key)
+            j = checkMode(key)
+            value_return = j.showDatabases()
+            print(value_return)
     except:
         return []
 
@@ -1075,6 +1075,8 @@ def alterDatabase(databaseOld, databaseNew):
         mode = dictionary.get(str(databaseOld))[0]
         j = checkMode(mode)
         value_return = j.alterDatabase(databaseOld, databaseNew)
+        if mode == "isam" and value_return == 1:
+            value_return = 0
         if value_return == 0:
             info = dictionary[str(databaseOld)]
             dictionary.pop(str(databaseOld))

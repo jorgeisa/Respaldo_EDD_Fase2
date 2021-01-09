@@ -348,5 +348,198 @@ def testCompress():
     # print(extractTable('db1', 'Table1_DB1'))
 
 
+def final_test():
+
+    # def createDatabase(database: str, mode: string, encoding: string) -> int:
+    # mode: 'avl', 'b', 'bplus', 'dict', 'isam', 'json', 'hash'
+    # encoding: 'ascii', 'iso-8859-1', 'utf8'
+    # {0: success, 1: error, 2: db exist, 3: incorrect mode, 4: incorrect encoding
+    print('#' * 20 + ' Create Database' + '#' * 20)
+    print(j.createDatabase('db1', 'avl', 'ascii'), end='-')
+    print(j.createDatabase('db2', 'avl', 'ascii'), end='-')
+    print(j.createDatabase('db3', 'avl', 'ascii'), end='-')
+    print(j.createDatabase('db4', 'b', 'ascii'), end='-')
+    print(j.createDatabase('db5', 'b', 'ascii'), end='-')
+    print(j.createDatabase('db6', 'b', 'ascii'), end='-')
+    print(j.createDatabase('db7', 'bplus', 'ascii'), end='-')
+    print(j.createDatabase('db8', 'bplus', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db9', 'bplus', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db10', 'dict', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db11', 'dict', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db12', 'dict', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db13', 'isam', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db14', 'isam', 'iso-8859-1'), end='-')
+    print(j.createDatabase('db15', 'isam', 'utf8'), end='-')
+    print(j.createDatabase('db16', 'json', 'utf8'), end='-')
+    print(j.createDatabase('db17', 'json', 'utf8'), end='-')
+    print(j.createDatabase('db18', 'json', 'utf8'), end='-')
+    print(j.createDatabase('db19', 'hash', 'utf8'), end='-')
+    print(j.createDatabase('db20', 'hash', 'utf8'), end='-')
+    print(j.createDatabase('db21', 'hash', 'utf8'))
+
+    print()
+    print('#' * 20 + ' Show Databases ' + '#' * 20)
+    print(j.showDatabases())
+
+    # def createTable(database: str, table: str, numberColumns: int) -> int:
+    # {0: success, 1: error, 2: db not exist, 3: table exist
+    print()
+    print('#' * 20 + ' Create Table ' + '#' * 20)
+    print(j.createTable('db1', 'T1DB1', 1), end='-')
+    print(j.createTable('db1', 'T2DB1', 1), end='-')
+    print(j.createTable('db1', 'T3DB1', 1))
+
+    print(j.createTable('db4', 'T1DB4', 2), end='-')
+    print(j.createTable('db4', 'T2DB4', 2), end='-')
+    print(j.createTable('db4', 'T3DB4', 2))
+
+    print(j.createTable('db7', 'T1DB7', 3), end='-')
+    print(j.createTable('db7', 'T2DB7', 3), end='-')
+    print(j.createTable('db7', 'T3DB7', 3))
+
+    print(j.createTable('db8', 'T1DB8', 4), end='-')
+    print(j.createTable('db8', 'T2DB8', 4), end='-')
+    print(j.createTable('db8', 'T3DB8', 4))
+
+    print(j.createTable('db9', 'T1DB9', 5), end='-')
+    print(j.createTable('db9', 'T2DB9', 5), end='-')
+    print(j.createTable('db9', 'T3DB9', 5))
+
+    print(j.createTable('db10', 'T1DB10', 3), end='-')
+    print(j.createTable('db10', 'T2DB10', 3), end='-')
+    print(j.createTable('db10', 'T3DB10', 3))
+
+    print(j.createTable('db13', 't1db13', 3), end='-')
+    print(j.createTable('db13', 'T2DB13', 3), end='-')
+    print(j.createTable('db13', 'T3DB13', 3))
+
+    print(j.createTable('db16', 'T1DB16', 3), end='-')
+    print(j.createTable('db16', 'T2DB16', 3), end='-')
+    print(j.createTable('db16', 'T3DB16', 3))
+
+    print(j.createTable('db19', 'T1DB19', 3), end='-')
+    print(j.createTable('db19', 'T2DB19', 3), end='-')
+    print(j.createTable('db19', 'T3DB19', 3))
+
+    # def insert(database: str, table: str, register: list) -> int:
+    # {0: success, 1: error, 2: db not exist, 3: table not exist, 4: PK duplicated, 5: out limit
+    print('#' * 20 + ' Insert ' + '#' * 20)
+    print(j.insert('db1', 'T1DB1', ['A1']), end='-')
+    print(j.insert('db1', 'T2DB1', ['B1']), end='-')
+    print(j.insert('db1', 'T3DB1', ['C1']))
+
+    print(j.insert('db4', 'T1DB4', ['A1', 'A2']), end='-')
+    print(j.insert('db4', 'T2DB4', ['B1', 'B2']), end='-')
+    print(j.insert('db4', 'T3DB4', ['C1', 'C2']))
+
+    print(j.insert('db7', 'T1DB7', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db7', 'T2DB7', ['B1', 'B2', 'B3']), end='-')
+    print(j.insert('db7', 'T3DB7', ['C1', 'C2', 'C3']))
+
+    print(j.insert('db10', 'T1DB10', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db10', 'T2DB10', ['B1', 'B2', 'B3']), end='-')
+    print(j.insert('db10', 'T3DB10', ['C1', 'C2', 'C3']))
+
+    print(j.insert('db13', 't1db13', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db13', 'T2DB13', ['B1', 'B2', 'B3']), end='-')
+    print(j.insert('db13', 'T3DB13', ['C1', 'C2', 'C3']))
+
+    print(j.insert('db16', 'T1DB16', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db16', 'T2DB16', ['B1', 'B2', 'B3']), end='-')
+    print(j.insert('db16', 'T3DB16', ['C1', 'C2', 'C3']))
+
+    print(j.insert('db19', 'T1DB19', ['A1', 'A2', 'A3']), end='-')
+    print(j.insert('db19', 'T2DB19', ['B1', 'B2', 'B3']), end='-')
+    print(j.insert('db19', 'T3DB19', ['C1', 'C2', 'C3']))
+
+    # def showDatabases() -> list:
+    # {[]: error, not db }
+    # dictionary = load('metadata')
+    # showDict(dictionary)
+    print()
+    print('#' * 20 + ' showDatabases ' + '#' * 20)
+    print(j.showDatabases())
+
+    print()
+    print('#' * 20 + ' extract Table Prueba1: sin cambiar nombre ' + '#' * 20)
+    print(j.extractTable("db1", "T1DB1"))
+    print(j.extractTable("db4", "T1DB4"))
+    print(j.extractTable("db4", "T2DB4"))
+    print(j.extractTable("db4", "T3DB4"))
+    print(j.extractTable("db7", "T1DB7"))
+    print(j.extractTable("db10", "T1DB10"))
+    print(j.extractTable("db13", "t1db13"))
+    print(j.extractTable("db16", "T1DB16"))
+    print(j.extractTable("db19", "T1DB19"))
+
+    print()
+    print('#' * 20 + ' Show Tables y exctract Table ISAM ' + '#' * 20)
+    print(j.showTables("db13"))
+    print(j.extractTable("db13", "t3db13"))  # isam mode
+
+    # def alterDatabase(databaseOld, databaseNew) -> int:
+    # {0: success, 1: error, 2: dbOld not exist, 3: dbNew exist}
+    print()
+    print('#' * 20 + ' alterdatabase ' + '#' * 20)
+    print(j.alterDatabase("db1", "db101"))
+    print(j.alterDatabase("db4", "db104"))
+    print(j.alterDatabase("db7", "db107"))
+    print(j.alterDatabase("db10", "db110"))
+    print(j.alterDatabase("db13", "db113"))
+    print(j.alterDatabase("db16", "db116"))
+    print(j.alterDatabase("db19", "db119"))
+
+    print()
+    print('#' * 20 + ' Show Databases ' + '#' * 20)
+    print(j.showDatabases())
+
+    print()
+    print('#' * 20 + ' drop database ' + '#' * 20)
+    # def dropDatabase(database: str) -> int:
+    # {0: success, 1: error, 2: db not exist}
+    print(j.dropDatabase("db2"))
+    print(j.dropDatabase("db3"))
+    print(j.dropDatabase("db5"))
+    print(j.dropDatabase("db6"))
+    print(j.dropDatabase("db8"))
+    print(j.dropDatabase("db9"))
+    print(j.dropDatabase("db11"))
+
+    print()
+    print('#' * 20 + ' Show Databases ' + '#' * 20)
+    print(j.showDatabases())
+
+    print()
+    # def showDatabases() -> list:
+    # {[]: error, not tables, None: not db }
+    print('#' * 20 + ' showTables ' + '#' * 20)
+    print(j.showTables("db101"))
+    print(j.showTables("db104"))
+    print(j.showTables("db107"))
+    print(j.showTables("db110"))
+    print(j.showTables("db113"))
+    print(j.showTables("db116"))
+    print(j.showTables("db119"))
+
+    print()
+    # def extractTable(database: str, table: str) -> list:
+    # {[]: , []: not registers, None: error}
+    print('#' * 20 + ' extract Table ' + '#' * 20)
+    print(j.extractTable("db101", "T1DB1"))
+    print(j.extractTable("db104", "T1DB4"))
+    print(j.extractTable("db107", "T1DB7"))
+    print(j.extractTable("db110", "T1DB10"))
+    print(j.extractTable("db113", "t3db13"))
+    print(j.extractTable("db116", "T1DB16"))
+    print(j.extractTable("db119", "T1DB19"))
+
+    print()
+    print('#' * 20 + ' extract Range Table ' + '#' * 20)
+    # def extractRangeTable(database: str, table: str, columnNumber: int, lower: any, upper: any) -> list:
+    # {[]: not registers, None: not db, not table, error}
+    print(j.extractRangeTable("db1", "T1DB1", 1, "A", "A"))
+
+# mode: 'avl', 'b', 'bplus', 'dict', 'isam', 'json', 'hash'
+final_test()
 test()
 # testCompress()
