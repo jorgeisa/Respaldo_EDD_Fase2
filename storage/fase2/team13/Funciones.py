@@ -613,8 +613,8 @@ def graphDSD(database):
 
         dictDatabases = load('metadata')
         if dictDatabases.get(database) is None:
-            return None        
-        
+            return None
+
         string = 'digraph G{\n'
         string += f'label = "DIAGRAMA DE ESTRUCTURA DE DATOS: {database}"\n'
         string += 'labelloc = \"t\"\n'
@@ -1601,6 +1601,7 @@ def load(nombre):
     objeto = file.read()
     file.close()
     return pickle.loads(objeto)
+
 
 def loadReturn(nombre):
     if os.path.isfile(os.getcwd() + '\\Data\\' + nombre + ".bin"):
